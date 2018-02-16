@@ -16,8 +16,8 @@
       </Label>
       <TableView fx:id="roomList" layoutX="62.0" layoutY="118.0" prefHeight="264.0" prefWidth="677.0">
         <columns>
-          <TableColumn prefWidth="514.0" text="Nazwa pokoju" />
-          <TableColumn prefWidth="162.0" text="Liczba wolnych miejsc" />
+          <TableColumn fx:id="nameColumn" prefWidth="514.0" text="Nazwa pokoju" />
+          <TableColumn fx:id="freeSlotsColumn" prefWidth="162.0" text="Liczba wolnych miejsc" />
         </columns>
       </TableView>
       <Button fx:id="playButton" layoutX="594.0" layoutY="405.0" mnemonicParsing="false" onAction="#play" prefHeight="41.0" prefWidth="145.0" text="Graj">

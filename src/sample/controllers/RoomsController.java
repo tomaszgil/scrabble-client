@@ -1,33 +1,34 @@
 package sample.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
+import sample.models.Room;
+import sample.utils.SceneSwitcher;
 
-import java.io.IOException;
 
 public class RoomsController {
 
     public Button playButton;
-    public TableView roomList;
+    public TableView<Room> roomList;
+    public TableColumn<Room, String> nameColumn;
+    public TableColumn<Room, Integer> freeSlotsColumn;
+    private SceneSwitcher switcher;
 
+    public RoomsController() {
+        switcher = new SceneSwitcher();
+    }
+
+    @FXML
+    public void initialize() {
+
+    }
 
     public void play(ActionEvent actionEvent) {
-        Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Parent newScene = null;
+        // TODO try to get info a room
 
-        try {
-            newScene = FXMLLoader.load(getClass().getResource("../views/game.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        currentStage.setScene(new Scene(newScene));
-        currentStage.show();
+        switcher.switchTo("game", actionEvent);
     }
 }
