@@ -1,15 +1,11 @@
 package sample.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import sample.State;
+import sample.models.Player;
 import sample.utils.SceneSwitcher;
 
-import java.io.IOException;
 
 public class LoginController {
 
@@ -26,6 +22,7 @@ public class LoginController {
         // TODO send name to server
 
         if (!name.isEmpty()) {
+            State.setPlayer(new Player(name));
             switcher.switchTo("rooms", actionEvent);
         }
     }

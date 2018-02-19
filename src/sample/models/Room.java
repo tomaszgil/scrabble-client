@@ -8,6 +8,7 @@ public class Room {
     public Room(Integer id, String name) {
         this.id = id;
         this.name = name;
+        this.freeSlots = 4;
     }
 
     public Integer getId() {
@@ -32,5 +33,14 @@ public class Room {
 
     public void setFreeSlots(Integer freeSlots) {
         this.freeSlots = freeSlots;
+    }
+
+    public boolean occupySlot() {
+        if (freeSlots > 0) {
+            freeSlots -= 1;
+            return true;
+        }
+
+        return false;
     }
 }

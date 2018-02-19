@@ -10,6 +10,7 @@ public final class State {
     private static Player player;
     private static Game game;
     private static ArrayList<Room> roomList;
+    private static ArrayList<Player> otherPlayers;
     private static Room room;
 
     public State() {
@@ -17,6 +18,7 @@ public final class State {
         game = null;
         roomList = null;
         room = null;
+        otherPlayers = null;
     }
 
     public static Player getPlayer() {
@@ -49,5 +51,13 @@ public final class State {
 
     public static void setRoom(Room room) {
         State.room = room;
+    }
+
+    public static ArrayList<Player> getOtherPlayers() {
+        return otherPlayers;
+    }
+
+    public static void setOtherPlayers(ArrayList<Player> otherPlayers) {
+        State.otherPlayers = otherPlayers;
     }
 }
