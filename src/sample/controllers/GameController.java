@@ -41,6 +41,11 @@ public class GameController {
     public void initialize() {
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
+        setupGameBoard();
+    }
+
+    private void setupGameBoard() {
+
     }
 
     public void onExchange(ActionEvent actionEvent) {
