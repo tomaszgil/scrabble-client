@@ -9,14 +9,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.State;
+import sample.models.AvailableLetters;
+import sample.models.Board;
+import sample.models.Letter;
 import sample.models.Room;
 import sample.utils.SceneSwitcher;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import static sample.Main.connector;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class RoomsController {
@@ -60,8 +63,37 @@ public class RoomsController {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
 
         // TODO try to get into room
-        if (selectedRoom != null && selectedRoom.occupySlot()) {
+        if (selectedRoom != null) {
             State.setRoom(selectedRoom);
+
+            // TODO get game board
+            Character[][] boardLetters = new Character[][] {
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', 'A', 'L', 'F', 'A', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' }
+            };
+            Board board = new Board(boardLetters);
+            State.setBoard(board);
+
+            // TODO get user letters
+            Character[] letters = new Character[] {
+                    'A', 'D', 'A', 'M', '0', '0', '0'
+            };
+            AvailableLetters availableLetters = new AvailableLetters(letters);
+            State.setAvailableLetters(availableLetters);
+
             switcher.switchTo("game", actionEvent);
         }
     }

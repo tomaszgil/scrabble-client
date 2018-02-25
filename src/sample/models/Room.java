@@ -33,13 +33,4 @@ public class Room {
     public void setFreeSlots(Integer freeSlots) {
         this.freeSlots = freeSlots;
     }
-
-    public boolean occupySlot() {
-        if (freeSlots > 0) {
-            freeSlots -= 1;
-            return true;
-        }
-
-        return false;
-    }
 }
