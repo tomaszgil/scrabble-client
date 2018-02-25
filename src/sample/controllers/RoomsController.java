@@ -13,6 +13,7 @@ import sample.models.Room;
 import sample.utils.SceneSwitcher;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static sample.Main.connector;
@@ -41,9 +42,18 @@ public class RoomsController {
     }
 
     private void getRooms() throws IOException{
-        char buffor[] = new char[500];
-        connector.inputStreamReader.read(buffor);
-        System.out.println(buffor);
+        char buf[] = new char[50];
+        connector.inputStreamReader.read(buf);
+        String message = String.valueOf(buf);
+        String [] data = message.split("\\_");
+
+        ArrayList<Room> rooms = new ArrayList<>();
+        for(int i=0; i<=10; i=i+2){
+            rooms.add(new Room(data[i], Integer.parseInt(data[i+1])));
+        }
+
+        State.setRoomList(rooms);
+        System.out.println(data[1]);
     }
 
     public void play(ActionEvent actionEvent) {
