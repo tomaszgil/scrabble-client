@@ -21,12 +21,10 @@ public class LoginController {
     }
 
     public void login(ActionEvent actionEvent) throws IOException{
-        String name = nameInput.getText().concat("\0");
-
-        connector.outputStreamWriter.write(name);
-        connector.outputStreamWriter.flush();
-
+        String name = nameInput.getText();
         if (!name.isEmpty()) {
+            connector.outputStreamWriter.write(name.concat("\0"));
+            connector.outputStreamWriter.flush();
             State.setPlayer(new Player(name));
             switcher.switchTo("rooms", actionEvent);
         }
