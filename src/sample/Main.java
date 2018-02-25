@@ -6,25 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.models.Room;
-
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 
 public class Main extends Application {
+    public static Connector connector;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Connector connector = new Connector();
-
-        BufferedReader stdIn =  new BufferedReader(new InputStreamReader(System.in));
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connector.getClientSocket().getOutputStream(), "UTF-8");
-
-        String userInput;
-
-        userInput = stdIn.readLine();
-        outputStreamWriter.write(userInput);
-        outputStreamWriter.flush();
+        connector = new Connector();
 
         Parent root = FXMLLoader.load(getClass().getResource("views/login.fxml"));
         primaryStage.setTitle("Scrabble Online");
