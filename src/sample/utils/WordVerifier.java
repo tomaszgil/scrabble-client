@@ -45,7 +45,6 @@ public class WordVerifier {
                 stringBuilder.append(line + "\n");
             }
 
-            System.out.println(stringBuilder.toString());
             correct = true;
         }
         catch (Exception e) {
