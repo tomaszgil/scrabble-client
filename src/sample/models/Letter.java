@@ -1,4 +1,4 @@
 package sample.models;
 
-public class Game {
+public class Letter {
 }

@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import sample.State;
 import sample.models.Player;
+import sample.utils.WordVerifier;
 
 public class GameController {
     @FXML
@@ -45,7 +46,9 @@ public class GameController {
     }
 
     private void setupGameBoard() {
-
+        WordVerifier wv = new WordVerifier();
+        System.out.println(wv.verify("Correct"));
+        System.out.println(wv.verify("Cwrong"));
     }
 
     public void onExchange(ActionEvent actionEvent) {
