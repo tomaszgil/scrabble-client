@@ -9,8 +9,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.State;
+import sample.models.Board;
+import sample.models.Letter;
 import sample.models.Room;
 import sample.utils.SceneSwitcher;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class RoomsController {
@@ -38,8 +43,38 @@ public class RoomsController {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
 
         // TODO try to get into room
-        if (selectedRoom != null && selectedRoom.occupySlot()) {
+        if (selectedRoom != null) {
             State.setRoom(selectedRoom);
+
+            // TODO get game board
+            Character[][] boardLetters = new Character[][] {
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', 'A', 'L', 'F', 'A', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' }
+            };
+            Board board = new Board(boardLetters);
+            State.setBoard(board);
+
+            // TODO get user letters
+            ArrayList<Letter> letters = new ArrayList<>();
+            letters.add(new Letter('A', true));
+            letters.add(new Letter('D', true));
+            letters.add(new Letter('A', true));
+            letters.add(new Letter('M', true));
+            State.setAvailableLetters(letters);
+
             switcher.switchTo("game", actionEvent);
         }
     }
