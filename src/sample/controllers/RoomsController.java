@@ -62,17 +62,17 @@ public class RoomsController {
                     { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
                     { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
                     { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
+                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' }
             };
             Board board = new Board(boardLetters);
             State.setBoard(board);
 
             // TODO get user letters
             ArrayList<Letter> letters = new ArrayList<>();
-            letters.add(new Letter('A'));
-            letters.add(new Letter('D'));
-            letters.add(new Letter('A'));
-            letters.add(new Letter('M'));
+            letters.add(new Letter('A', true));
+            letters.add(new Letter('D', true));
+            letters.add(new Letter('A', true));
+            letters.add(new Letter('M', true));
             State.setAvailableLetters(letters);
 
             switcher.switchTo("game", actionEvent);

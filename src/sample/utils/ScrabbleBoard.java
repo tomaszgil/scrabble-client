@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public final class ScrabbleBoard {
 
     private static M[][] multiplierMap;
-    public static enum M {
+    public enum M {
         NONE, DOUBLE_WORD, TRIPLE_WORD, DOUBLE_LETTER, TRIPLE_LETTER
     }
 
-    public ScrabbleBoard() {
+    static {
         multiplierMap = new M[][]{
                 { M.TRIPLE_WORD,   M.NONE,          M.NONE,          M.DOUBLE_LETTER, M.NONE,        M.NONE,          M.NONE,          M.TRIPLE_WORD,   M.NONE,          M.NONE,          M.NONE,        M.DOUBLE_LETTER, M.NONE,          M.NONE,          M.TRIPLE_WORD },
                 { M.NONE,          M.DOUBLE_WORD,   M.NONE,          M.NONE,          M.NONE,        M.TRIPLE_LETTER, M.NONE,          M.NONE,          M.NONE,          M.TRIPLE_LETTER, M.NONE,        M.NONE,          M.NONE,          M.DOUBLE_WORD,   M.NONE },

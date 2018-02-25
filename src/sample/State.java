@@ -15,7 +15,7 @@ public final class State {
     private static ArrayList<Player> otherPlayers;
     private static Room room;
 
-    public State() {
+    static {
         player = null;
         board = null;
         availableLetters = null;

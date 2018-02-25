@@ -1,21 +1,21 @@
 package sample.utils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public final class ScrabbleLetter {
 
     private static Character[] letters;
     private static Map<Character, Integer> lettersPoints;
     
-    public ScrabbleLetter() {
+    static {
         letters = new Character[]{
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                 'W', 'X', 'Y', 'Z'
         };
 
-        lettersPoints = new HashMap<>();
+        lettersPoints = new TreeMap<>();
 
         lettersPoints.put('A', 1);
         lettersPoints.put('E', 1);
@@ -49,6 +49,8 @@ public final class ScrabbleLetter {
 
         lettersPoints.put('Q', 10);
         lettersPoints.put('Z', 10);
+
+        System.out.println(lettersPoints.get('Z'));
     }
 
     public static Integer getPointsForLetter(Character letter) {
