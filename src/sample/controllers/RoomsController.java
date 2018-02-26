@@ -51,8 +51,7 @@ public class RoomsController {
     private void getRooms() throws IOException{
         char buf[] = new char[50];
 
-        int value = connector.inputStreamReader.read(buf);
-        System.out.println(buf);
+        connector.inputStreamReader.read(buf);
 
         String message = String.valueOf(buf);
         String [] data = message.split("\\_");
@@ -63,14 +62,11 @@ public class RoomsController {
         }
 
         State.setRoomList(rooms);
-
     }
 
     public void play(ActionEvent actionEvent) throws IOException {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
 
-
-        // TODO try to get into room
         if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) {
             connector.outputStreamWriter.write(selectedRoom.getName().concat("\0"));
             connector.outputStreamWriter.flush();
@@ -86,7 +82,6 @@ public class RoomsController {
             Character[][] boardLetters = new Character[15][15];
             for(int i =0; i<15;i++){
                 for(int j=0; j<15; j++){
-
                     boardLetters[i][j] = data[z].charAt(0);
                     z++;
                 }
