@@ -15,6 +15,10 @@ import sample.models.Letter;
 import sample.models.Room;
 import sample.utils.SceneSwitcher;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 import static sample.Main.connector;
@@ -46,7 +50,10 @@ public class RoomsController {
 
     private void getRooms() throws IOException{
         char buf[] = new char[50];
-        connector.inputStreamReader.read(buf);
+
+        int value = connector.inputStreamReader.read(buf);
+        System.out.println(buf);
+
         String message = String.valueOf(buf);
         String [] data = message.split("\\_");
 
@@ -56,34 +63,35 @@ public class RoomsController {
         }
 
         State.setRoomList(rooms);
-        System.out.println(data[1]);
+
     }
 
-    public void play(ActionEvent actionEvent) {
+    public void play(ActionEvent actionEvent) throws IOException {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
 
+
         // TODO try to get into room
-        if (selectedRoom != null) {
+        if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) {
+            connector.outputStreamWriter.write(selectedRoom.getName().concat("\0"));
+            connector.outputStreamWriter.flush();
             State.setRoom(selectedRoom);
 
-            // TODO get game board
-            Character[][] boardLetters = new Character[][] {
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', 'A', 'L', 'F', 'A', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' },
-                    { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' }
-            };
+            char bufor[] = new char[450];
+            connector.inputStreamReader.read(bufor);
+
+            String message = String.valueOf(bufor);
+            System.out.println(message);
+            String [] data = message.split("\\_");
+            int z =0;
+            Character[][] boardLetters = new Character[15][15];
+            for(int i =0; i<15;i++){
+                for(int j=0; j<15; j++){
+
+                    boardLetters[i][j] = data[z].charAt(0);
+                    z++;
+                }
+            }
+
             Board board = new Board(boardLetters);
             State.setBoard(board);
 

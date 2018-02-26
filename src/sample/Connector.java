@@ -9,6 +9,7 @@ public class Connector {
     public OutputStreamWriter outputStreamWriter;
     public InputStreamReader inputStreamReader;
     public BufferedReader bufferedReader;
+    public int skipValue=0;
 
     Connector(){
         try {
@@ -28,4 +29,5 @@ public class Connector {
     public void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
+
 }
