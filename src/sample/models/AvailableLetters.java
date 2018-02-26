@@ -32,6 +32,10 @@ public class AvailableLetters {
         return letters;
     }
 
+    public void setLetter(Integer i, Letter letter) {
+        letters[i] = letter;
+    }
+
     private void prepareBoard(Character[] letterMap) {
         for (int i = 0; i < 7; i++) {
             if (letterMap[i] != '0') { // not an empty character

@@ -4,9 +4,9 @@ public class Player {
     private String name;
     private Integer points;
 
-    public Player(String name) {
+    public Player(String name, Integer points) {
         this.name = name;
-        this.points = 0;
+        this.points = points;
     }
 
     public String getName() {
@@ -25,7 +25,4 @@ public class Player {
         this.points = points;
     }
 
-    public void addPoints(Integer points) {
-        this.points += points;
-    }
 }

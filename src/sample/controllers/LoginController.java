@@ -22,7 +22,7 @@ public class LoginController {
         // TODO send name to server
 
         if (!name.isEmpty()) {
-            State.setPlayer(new Player(name));
+            State.setPlayer(new Player(name, 0));
             switcher.switchTo("rooms", actionEvent);
         }
     }

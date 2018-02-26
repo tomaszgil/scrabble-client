@@ -44,4 +44,8 @@ public class Board {
         }
     }
 
+    public void setLetter(Integer row, Integer col, Letter letter) {
+        letters[row][col] = letter;
+    }
+
 }
