@@ -25,7 +25,7 @@ public class LoginController {
         if (!name.isEmpty()) {
             connector.outputStreamWriter.write(name.concat("\0"));
             connector.outputStreamWriter.flush();
-            State.setPlayer(new Player(name));
+            State.setPlayer(new Player(name, 0));
             switcher.switchTo("rooms", actionEvent);
         }
     }

@@ -9,10 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.State;
-import sample.models.AvailableLetters;
-import sample.models.Board;
-import sample.models.Letter;
-import sample.models.Room;
+import sample.models.*;
 import sample.utils.SceneSwitcher;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,6 +90,13 @@ public class RoomsController {
             };
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
+
+            // TODO get other clients
+            ArrayList<Player> otherPlayers = new ArrayList<>();
+            otherPlayers.add(new Player("mietek", 4));
+            otherPlayers.add(new Player("zdzisiek", 20));
+            otherPlayers.add(new Player("wacek", 17));
+            State.setOtherPlayers(otherPlayers);
 
             switcher.switchTo("game", actionEvent);
         }

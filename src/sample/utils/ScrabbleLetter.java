@@ -49,8 +49,6 @@ public final class ScrabbleLetter {
 
         lettersPoints.put('Q', 10);
         lettersPoints.put('Z', 10);
-
-        System.out.println(lettersPoints.get('Z'));
     }
 
     public static Integer getPointsForLetter(Character letter) {
