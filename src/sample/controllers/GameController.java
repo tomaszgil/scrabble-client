@@ -47,6 +47,7 @@ public class GameController {
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
         setupGameBoard();
+        setupAvailableLetters();
     }
 
     private void setupGameBoard() {
@@ -68,6 +69,26 @@ public class GameController {
                 box.getChildren().addAll(letter, points);
                 boardGrid.add(box, i, j);
             }
+        }
+    }
+
+    private void setupAvailableLetters() {
+        Letter[] letters = State.getAvailableLetters().getLetters();
+
+        for (int i = 0; i < 7; i++) {
+            VBox box = new VBox(3);
+            box.setAlignment(Pos.CENTER);
+            Text letter = new Text("");
+            Text points = new Text("");
+            letter.setFont(Font.font(22));
+            points.setFont(Font.font(12));
+
+            if (letters[i] != null) {
+                letter.setText(letters[i].getCharacter().toString());
+                points.setText(letters[i].getPoints().toString());
+            }
+            box.getChildren().addAll(letter, points);
+            lettersGrid.add(box, i, 0);
         }
     }
 

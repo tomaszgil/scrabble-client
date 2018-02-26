@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.State;
+import sample.models.AvailableLetters;
 import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Room;
@@ -68,12 +69,11 @@ public class RoomsController {
             State.setBoard(board);
 
             // TODO get user letters
-            ArrayList<Letter> letters = new ArrayList<>();
-            letters.add(new Letter('A', true));
-            letters.add(new Letter('D', true));
-            letters.add(new Letter('A', true));
-            letters.add(new Letter('M', true));
-            State.setAvailableLetters(letters);
+            Character[] letters = new Character[] {
+                    'A', 'D', 'A', 'M', '0', '0', '0'
+            };
+            AvailableLetters availableLetters = new AvailableLetters(letters);
+            State.setAvailableLetters(availableLetters);
 
             switcher.switchTo("game", actionEvent);
         }

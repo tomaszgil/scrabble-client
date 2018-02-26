@@ -1,16 +1,13 @@
 package sample;
 
-import sample.models.Board;
-import sample.models.Letter;
-import sample.models.Player;
-import sample.models.Room;
+import sample.models.*;
 
 import java.util.ArrayList;
 
 public final class State {
     private static Player player;
     private static Board board;
-    private static ArrayList<Letter> availableLetters;
+    private static AvailableLetters availableLetters;
     private static ArrayList<Room> roomList;
     private static ArrayList<Player> otherPlayers;
     private static Room room;
@@ -18,7 +15,6 @@ public final class State {
     static {
         player = null;
         board = null;
-        availableLetters = null;
         roomList = null;
         room = null;
         otherPlayers = null;
@@ -40,11 +36,11 @@ public final class State {
         State.board = board;
     }
 
-    public static ArrayList<Letter> getAvailableLetters() {
+    public static AvailableLetters getAvailableLetters() {
         return availableLetters;
     }
 
-    public static void setAvailableLetters(ArrayList<Letter> availableLetters) {
+    public static void setAvailableLetters(AvailableLetters availableLetters) {
         State.availableLetters = availableLetters;
     }
 

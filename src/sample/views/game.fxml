@@ -309,9 +309,9 @@
                </children>
             </GridPane>
          </children></AnchorPane>
-      <AnchorPane fx:id="lettersPane" layoutX="307.0" layoutY="717.0" prefHeight="69.0" prefWidth="559.0">
+      <AnchorPane fx:id="lettersPane" layoutX="307.0" layoutY="717.0" prefHeight="69.0" prefWidth="513.0">
          <children>
-            <GridPane fx:id="lettersGrid" layoutX="5.0" layoutY="4.0" prefHeight="61.0" prefWidth="547.0">
+            <GridPane fx:id="lettersGrid" layoutX="5.0" layoutY="4.0" prefHeight="61.0" prefWidth="502.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -320,11 +320,19 @@
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" GridPane.columnIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" GridPane.columnIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" GridPane.columnIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" GridPane.columnIndex="4" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" GridPane.columnIndex="5" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f2ea" height="61.0" stroke="#c3c3c3" strokeType="INSIDE" width="62.0" GridPane.columnIndex="6" />
+               </children>
             </GridPane>
          </children></AnchorPane>
       <Button fx:id="exchangeButton" layoutX="885.0" layoutY="717.0" mnemonicParsing="false" onAction="#onExchange" prefHeight="69.0" prefWidth="94.0" text="Wymień" />
