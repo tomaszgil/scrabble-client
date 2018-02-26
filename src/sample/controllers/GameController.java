@@ -149,10 +149,6 @@ public class GameController {
             rowIndex = 0; // rakfx
         }
 
-        System.out.println("Board");
-        System.out.println(colIndex);
-        System.out.println(rowIndex);
-
         boardLetterColumnIndex = colIndex;
         boardLetterRowIndex = rowIndex;
 
@@ -185,6 +181,26 @@ public class GameController {
         }
     }
 
+    private void withdrawLetterFromBoard() {
+        Letter letter = State.getBoard().getLetters()[boardLetterRowIndex][boardLetterColumnIndex];
+
+        if (letter.isDraggable()) {
+            Character letterChar = letter.getCharacter();
+            Integer letterPoints = letter.getPoints();
+            Integer slotNumber = State.getAvailableLetters().setLetterFirstFree(letter);
+            State.getBoard().setLetter(boardLetterRowIndex, boardLetterColumnIndex, null);
+
+            ObservableList<Text> boardLetterText = getTextOnLetter(boardLetterRowIndex, boardLetterColumnIndex, boardGrid);
+            ObservableList<Text> availableLetterText = getTextOnLetter(0, slotNumber, lettersGrid);
+            boardLetterText.get(0).setText("");
+            boardLetterText.get(1).setText("");
+            availableLetterText.get(0).setText(letterChar.toString());
+            availableLetterText.get(1).setText(letterPoints.toString());
+
+            resetIndexes();
+        }
+    }
+
     private ObservableList<Text> getTextOnLetter(Integer row, Integer col, GridPane pane) {
         ObservableList<Node> children = pane.getChildren();
         VBox box = null;
@@ -208,9 +224,6 @@ public class GameController {
         return texts;
     }
 
-    private void withdrawLetterFromBoard() {
-    }
-
     private void resetIndexes() {
         boardLetterColumnIndex = null;
         boardLetterRowIndex = null;
@@ -224,9 +237,6 @@ public class GameController {
         if (colIndex == null) {
             colIndex = 0; // rakfx
         }
-
-        System.out.println("Available");
-        System.out.println(colIndex);
 
         availableLetterIndex = colIndex;
     }

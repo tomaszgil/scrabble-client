@@ -36,6 +36,17 @@ public class AvailableLetters {
         letters[i] = letter;
     }
 
+    public Integer setLetterFirstFree(Letter letter) {
+        for (Integer i = 0; i < 7; i++) {
+            if (letters[i] == null) {
+                letters[i] = letter;
+                return i;
+            }
+        }
+
+        return null;
+    }
+
     private void prepareBoard(Character[] letterMap) {
         for (int i = 0; i < 7; i++) {
             if (letterMap[i] != '0') { // not an empty character
