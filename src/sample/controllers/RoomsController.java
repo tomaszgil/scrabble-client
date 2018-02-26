@@ -14,7 +14,10 @@ import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Room;
 import sample.utils.SceneSwitcher;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import static sample.Main.connector;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -33,11 +36,27 @@ public class RoomsController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException{
+        getRooms();
         nameColumn.setCellValueFactory(new PropertyValueFactory<Room, String>("name"));
         freeSlotsColumn.setCellValueFactory(new PropertyValueFactory<Room, Integer>("freeSlots"));
         roomsData.setAll(State.getRoomList());
         roomList.setItems(roomsData);
+    }
+
+    private void getRooms() throws IOException{
+        char buf[] = new char[50];
+        connector.inputStreamReader.read(buf);
+        String message = String.valueOf(buf);
+        String [] data = message.split("\\_");
+
+        ArrayList<Room> rooms = new ArrayList<>();
+        for(int i=0; i<=10; i=i+2){
+            rooms.add(new Room(data[i], Integer.parseInt(data[i+1])));
+        }
+
+        State.setRoomList(rooms);
+        System.out.println(data[1]);
     }
 
     public void play(ActionEvent actionEvent) {

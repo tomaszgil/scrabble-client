@@ -5,10 +5,9 @@ public class Room {
     private String name;
     private Integer freeSlots;
 
-    public Room(Integer id, String name) {
-        this.id = id;
+    public Room(String name, int freeSlots) {
         this.name = name;
-        this.freeSlots = 4;
+        this.freeSlots = freeSlots;
     }
 
     public Integer getId() {
