@@ -111,6 +111,11 @@ public class Board {
         if (coords.size() == 2) {
             Integer i = coords.get(0);
             Integer j = coords.get(1) + 1;
+            Integer k = coords.get(1) - 1;
+
+            if (k >= 0 && letters[i][k] != null) {
+                word = true;
+            }
 
             while (j < 15) {
                 if (letters[i][j] != null) {
@@ -159,6 +164,11 @@ public class Board {
         if (coords.size() == 2) {
             Integer i = coords.get(0) + 1;
             Integer j = coords.get(1);
+            Integer k = coords.get(0) - 1;
+
+            if (k >= 0 && letters[k][j] != null) {
+                word = true;
+            }
 
             while (i < 15) {
                 if (letters[i][j] != null) {
