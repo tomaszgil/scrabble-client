@@ -10,17 +10,20 @@ public class Board {
 
     private Letter[][] letters;
     private boolean firstMove;
+    private ArrayList<String> initialWords;
 
     public Board(Character[][] letterMap) {
         this.letters = new Letter[15][15];
         prepareBoard(letterMap);
         this.firstMove = checkFirstMove();
+        this.initialWords = getAllWords();
     }
 
     public void setLetterMap(Character[][] letterMap) {
         this.letters = new Letter[15][15];
         prepareBoard(letterMap);
         this.firstMove = checkFirstMove();
+        this.initialWords = getAllWords();
     }
 
     public Character[][] getLetterMap() {
@@ -208,13 +211,31 @@ public class Board {
             }
 
             ArrayList<String> rowWords = new ArrayList<>(Arrays.asList(s.split("0")));
-            rowWords.removeAll(Arrays.asList("", null));
+            rowWords.removeIf(word -> word.length() < 2);
             words.addAll(rowWords);
         }
 
-        System.out.println(words);
+        for (int j = 0; j < 15; j++) {
+            String s = "";
+            for (int i = 0; i < 15; i++) {
+                s += map[i][j];
+            }
+
+            ArrayList<String> columnWords = new ArrayList<>(Arrays.asList(s.split("0")));
+            columnWords.removeIf(word -> word.length() < 2);
+            words.addAll(columnWords);
+        }
 
         return words;
+    }
+
+    public ArrayList<String> getAddedWords() {
+        ArrayList<String> all = getAllWords();
+        ArrayList<String> added = new ArrayList<>(all);
+        added.removeAll(initialWords);
+
+        System.out.println(added);
+        return added;
     }
 
 }

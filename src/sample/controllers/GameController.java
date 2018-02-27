@@ -144,6 +144,8 @@ public class GameController {
     }
 
     public void onConfirm(ActionEvent actionEvent) {
+        resultLabel.setText("");
+
         Board board = State.getBoard();
         if (!board.wordInRow() && !board.wordInColumn()) {
             resultLabel.setText("Letter tiles must be aligned in either one row or column.");
@@ -155,7 +157,14 @@ public class GameController {
             return;
         }
 
-        ArrayList<String> words = board.getAllWords();
+        ArrayList<String> words = board.getAddedWords();
+        boolean allValid = verifier.verifyAll(words);
+
+        if (!allValid) {
+            ArrayList<String> invalid = verifier.getInvalid();
+            resultLabel.setText("Invalid word: " + invalid.get(0));
+            return;
+        }
 
         resultLabel.setText("Correct. Sending the board!");
     }
