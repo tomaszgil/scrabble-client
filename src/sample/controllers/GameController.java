@@ -113,6 +113,26 @@ public class GameController {
         }
     }
 
+    private void refreshGameBoard() {
+        Letter[][] letters = State.getBoard().getLetters();
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                ObservableList<Text> boardLetterText = getTextOnLetter(boardLetterRowIndex, boardLetterColumnIndex, boardGrid);
+
+                if (letters[i][j] != null) {
+                    Character letterChar = letters[i][j].getCharacter();
+                    Integer letterPoints = letters[i][j].getPoints();
+                    boardLetterText.get(0).setText(letterChar.toString());
+                    boardLetterText.get(1).setText(letterPoints.toString());
+                } else {
+                    boardLetterText.get(0).setText("");
+                    boardLetterText.get(1).setText("");
+                }
+            }
+        }
+    }
+
     private void setupAvailableLetters() {
         Letter[] letters = State.getAvailableLetters().getLetters();
 
@@ -133,6 +153,24 @@ public class GameController {
             }
             box.getChildren().addAll(letter, points);
             lettersGrid.add(box, i, 0);
+        }
+    }
+
+    private void refreshAvailableLetters() {
+        Letter[] letters = State.getAvailableLetters().getLetters();
+
+        for (int i = 0; i < 7; i++) {
+            ObservableList<Text> availableLetterText = getTextOnLetter(0, availableLetterIndex, lettersGrid);
+
+            if (letters[i] != null) {
+                Character letterChar = letters[i].getCharacter();
+                Integer letterPoints = letters[i].getPoints();
+                availableLetterText.get(0).setText(letterChar.toString());
+                availableLetterText.get(1).setText(letterPoints.toString());
+            } else {
+                availableLetterText.get(0).setText("");
+                availableLetterText.get(1).setText("");
+            }
         }
     }
 
