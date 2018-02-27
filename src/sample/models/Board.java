@@ -3,6 +3,8 @@ package sample.models;
 import sample.State;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Board {
 
@@ -108,7 +110,7 @@ public class Board {
             Integer j = coords.get(1) + 1;
 
             while (j < 15) {
-                if (letters[i][j] != null && letters[i][j].isDraggable()) {
+                if (letters[i][j] != null) {
                     word = true;
                     j++;
                 } else {
@@ -156,7 +158,7 @@ public class Board {
             Integer j = coords.get(1);
 
             while (i < 15) {
-                if (letters[i][j] != null && letters[i][j].isDraggable()) {
+                if (letters[i][j] != null) {
                     word = true;
                     i++;
                 } else {
@@ -193,6 +195,26 @@ public class Board {
 
     public boolean isMiddleSlotFree() {
         return letters[7][7] == null;
+    }
+
+    public ArrayList<String> getAllWords() {
+        ArrayList<String> words = new ArrayList<String>();
+        Character[][] map = getLetterMap();
+
+        for (int i = 0; i < 15; i++) {
+            String s = "";
+            for (int j = 0; j < 15; j++) {
+                s += map[i][j];
+            }
+
+            ArrayList<String> rowWords = new ArrayList<>(Arrays.asList(s.split("0")));
+            rowWords.removeAll(Arrays.asList("", null));
+            words.addAll(rowWords);
+        }
+
+        System.out.println(words);
+
+        return words;
     }
 
 }

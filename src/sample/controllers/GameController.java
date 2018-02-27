@@ -22,6 +22,7 @@ import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Player;
 import sample.utils.SceneSwitcher;
+import sample.utils.WordVerifier;
 
 import java.sql.Array;
 import java.sql.SQLOutput;
@@ -59,12 +60,14 @@ public class GameController {
 
     private ObservableList<Player> opponentsData = FXCollections.observableArrayList();
     private SceneSwitcher switcher;
+    private WordVerifier verifier;
     private Integer availableLetterIndex;
     private Integer boardLetterRowIndex;
     private Integer boardLetterColumnIndex;
 
     public GameController() {
         switcher = new SceneSwitcher();
+        verifier = new WordVerifier();
         availableLetterIndex = null;
         boardLetterRowIndex = null;
         boardLetterColumnIndex = null;
@@ -152,13 +155,7 @@ public class GameController {
             return;
         }
 
-        ArrayList<String> invalid = board.getAllWords();
-
-        if (!board.verifyAllWords()) {
-            resultLabel.setText("In first move you have to put a letter in the middle of the board.");
-            return;
-        }
-        // TODO get and veify words
+        ArrayList<String> words = board.getAllWords();
 
         resultLabel.setText("Correct. Sending the board!");
     }

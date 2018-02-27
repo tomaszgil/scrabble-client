@@ -15,6 +15,6 @@ public class ScrabbleScoreCounter {
     }
 
     public Integer countPoints() {
-
+        return 0;
     }
 }
