@@ -22,6 +22,7 @@ import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Player;
 import sample.utils.SceneSwitcher;
+import sample.utils.ScrabbleScoreCounter;
 import sample.utils.WordVerifier;
 
 import java.sql.Array;
@@ -61,16 +62,20 @@ public class GameController {
     private ObservableList<Player> opponentsData = FXCollections.observableArrayList();
     private SceneSwitcher switcher;
     private WordVerifier verifier;
+    private ScrabbleScoreCounter counter;
     private Integer availableLetterIndex;
     private Integer boardLetterRowIndex;
     private Integer boardLetterColumnIndex;
+    private boolean editable;
 
     public GameController() {
         switcher = new SceneSwitcher();
         verifier = new WordVerifier();
+        counter = new ScrabbleScoreCounter();
         availableLetterIndex = null;
         boardLetterRowIndex = null;
         boardLetterColumnIndex = null;
+        editable = State.isMyTurn();
     }
 
     @FXML
@@ -185,13 +190,16 @@ public class GameController {
     }
 
     public void onExchange(ActionEvent actionEvent) {
+        // TODO if editable...
     }
 
     public void onPass(ActionEvent actionEvent) {
         // TODO send pass to the servers
+        // TODO if editable...
     }
 
     public void onConfirm(ActionEvent actionEvent) {
+        // TODO if editable...
         resultLabel.setText("");
 
         Board board = State.getBoard();
@@ -214,10 +222,24 @@ public class GameController {
             return;
         }
 
+        Integer score = counter.countPoints(board.getLetters());
+
+        // TODO send board, remaining available letters and user score
+
+        State.getPlayer().addPoints(score);
+        board.saveBoard();
+        refreshGameBoard();
+        // TODO save letters
+        resetIndexes();
+        State.setMyTurn(false);
+
+
+        userScore.setText(State.getPlayer().getPoints().toString());
         resultLabel.setText("Correct. Sending the board!");
     }
 
     public void onBoardRect(MouseEvent mouseEvent) {
+        // TODO if editable...
         Node source = (Node)mouseEvent.getSource() ;
         Integer colIndex = GridPane.getColumnIndex(source);
         Integer rowIndex = GridPane.getRowIndex(source);
@@ -312,6 +334,7 @@ public class GameController {
     }
 
     public void onAvailableRect(MouseEvent mouseEvent) {
+        // TODO if editable...
         Node source = (Node)mouseEvent.getSource();
         Integer colIndex = GridPane.getColumnIndex(source);
 

@@ -11,6 +11,7 @@ public final class State {
     private static ArrayList<Room> roomList;
     private static ArrayList<Player> otherPlayers;
     private static Room room;
+    private static boolean myTurn;
 
     static {
         player = null;
@@ -18,6 +19,7 @@ public final class State {
         roomList = null;
         room = null;
         otherPlayers = null;
+        myTurn = false;
     }
 
     public static Player getPlayer() {
@@ -66,5 +68,13 @@ public final class State {
 
     public static void setOtherPlayers(ArrayList<Player> otherPlayers) {
         State.otherPlayers = otherPlayers;
+    }
+
+    public static boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public static void setMyTurn(boolean myTurn) {
+        State.myTurn = myTurn;
     }
 }

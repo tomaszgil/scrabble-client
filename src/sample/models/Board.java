@@ -60,6 +60,11 @@ public class Board {
         letters[row][col] = letter;
     }
 
+    public void saveBoard() {
+        Character[][] map = getLetterMap();
+        setLetterMap(map);
+    }
+
     public boolean isFirstMove() {
         return firstMove;
     }

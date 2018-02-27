@@ -89,6 +89,9 @@ public class RoomsController {
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
 
+            // TODO check if this is my turn
+            // State.setMyTurn(true);
+
             // TODO get other clients
             ArrayList<Player> otherPlayers = new ArrayList<>();
             otherPlayers.add(new Player("mietek", 4));
