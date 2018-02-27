@@ -36,8 +36,7 @@ public class ServerCommunicator {
                        if(numberOfUsers!='0'){
                            int max = Integer.parseInt(data[0]);
                            for(int i =1; i<max*2; i=i+2){
-                               System.out.println(data[i]);
-                               System.out.println(data[i+1]);
+                               System.out.println("Gracz " + data[i] + " score: " + data[i+1]);
                                otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
                            }
                        }
