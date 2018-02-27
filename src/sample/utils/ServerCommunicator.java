@@ -1,5 +1,7 @@
 package sample.utils;
 
+import javafx.fxml.FXMLLoader;
+import sample.controllers.GameController;
 import sample.models.Player;
 import sample.State;
 
@@ -9,14 +11,21 @@ import java.util.ArrayList;
 import static sample.Main.connector;
 
 public class ServerCommunicator {
-   public Thread thread = new Thread() {
+    private GameController gameController;
+
+    public void setGameController(GameController gameController){
+        this.gameController = gameController;
+    }
+
+
+    public Thread thread = new Thread() {
 
        @Override public void run(){
            while (true){
                try {
+                   System.out.println("Oczekuje na dane");
                    String[] data = connector.receiveMessage(2);
                    if(data[0].charAt(0) == '1'){ //New user in room
-
 
                        ArrayList<Player> otherPlayers = new ArrayList<>();
                        data = null;
@@ -34,7 +43,6 @@ public class ServerCommunicator {
                        }
 
                        sample.State.setOtherPlayers(otherPlayers);
-
                    }
                }catch (Exception e){}
            }

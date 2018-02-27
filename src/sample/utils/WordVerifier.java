@@ -3,6 +3,7 @@ package sample.utils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 public class WordVerifier {
@@ -14,6 +15,8 @@ public class WordVerifier {
     private String language;
     private String appId;
     private String appKey;
+    private ArrayList<String> valid;
+    private ArrayList<String> invalid;
 
     public WordVerifier() {
         this.language = "en";
@@ -52,6 +55,31 @@ public class WordVerifier {
         }
 
         return correct;
+    }
+
+    public ArrayList<String> getValid() {
+        return valid;
+    }
+
+    public ArrayList<String> getInvalid() {
+        return invalid;
+    }
+
+    public boolean verifyAll(ArrayList<String> words) {
+        boolean result = true;
+        valid = new ArrayList<>();
+        invalid = new ArrayList<>();
+
+        for (String word : words) {
+            if (verify(word)) {
+                valid.add(word);
+            } else {
+                invalid.add(word);
+                result = false;
+            }
+        }
+
+        return result;
     }
 
 }

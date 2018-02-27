@@ -15,12 +15,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import sample.State;
+import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Player;
-import sample.utils.ServerCommunicator;
+import sample.utils.SceneSwitcher;
+import sample.utils.ScrabbleScoreCounter;
+import sample.utils.WordVerifier;
+
 
 import java.sql.Array;
 import java.sql.SQLOutput;
@@ -53,24 +59,47 @@ public class GameController {
     public GridPane boardGrid;
     @FXML
     public GridPane lettersGrid;
+    @FXML
+    public Label resultLabel;
+    @FXML
+    public Label roomLabel;
+    @FXML
+    public Label turnLabel;
 
     private ObservableList<Player> opponentsData = FXCollections.observableArrayList();
+    private SceneSwitcher switcher;
+    private WordVerifier verifier;
+    private ScrabbleScoreCounter counter;
     private Integer availableLetterIndex;
     private Integer boardLetterRowIndex;
     private Integer boardLetterColumnIndex;
+    private boolean editable;
 
     public GameController() {
+        switcher = new SceneSwitcher();
+        verifier = new WordVerifier();
+        counter = new ScrabbleScoreCounter();
         availableLetterIndex = null;
         boardLetterRowIndex = null;
         boardLetterColumnIndex = null;
+        editable = State.isMyTurn();
+
     }
 
     @FXML
     public void initialize() {
+
         connector.serverCommunicator.thread.start();
 
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
+        roomLabel.setText(State.getRoom().getName());
+
+        if (State.isMyTurn()) {
+            turnLabel.setText("Your turn!");
+        } else {
+            turnLabel.setText("");
+        }
 
         opponentNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("name"));
         opponentScoreColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("points"));
@@ -79,6 +108,22 @@ public class GameController {
 
         setupGameBoard();
         setupAvailableLetters();
+    }
+
+    private void refreshUserLabels() {
+        userName.setText(State.getPlayer().getName());
+        userScore.setText(State.getPlayer().getPoints().toString());
+
+        if (State.isMyTurn()) {
+            turnLabel.setText("Your turn!");
+        } else {
+            turnLabel.setText("");
+        }
+    }
+
+    public void refreshOpponentsTable() {
+        opponentsData.setAll(State.getOtherPlayers());
+        opponentsResults.setItems(opponentsData);
     }
 
     private void setupGameBoard() {
@@ -99,9 +144,41 @@ public class GameController {
                 if (letters[i][j] != null) {
                     letter.setText(letters[i][j].getCharacter().toString());
                     points.setText(letters[i][j].getPoints().toString());
+
+                    if (letters[i][j].isDraggable()) {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
+                    } else {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
+                    }
                 }
                 box.getChildren().addAll(letter, points);
                 boardGrid.add(box, j, i);
+            }
+        }
+    }
+
+    private void refreshGameBoard() {
+        Letter[][] letters = State.getBoard().getLetters();
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                ObservableList<Text> boardLetterText = getTextOnLetter(i, j, boardGrid);
+
+                if (letters[i][j] != null) {
+                    Character letterChar = letters[i][j].getCharacter();
+                    Integer letterPoints = letters[i][j].getPoints();
+                    boardLetterText.get(0).setText(letterChar.toString());
+                    boardLetterText.get(1).setText(letterPoints.toString());
+
+                    if (letters[i][j].isDraggable()) {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
+                    } else {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
+                    }
+                } else {
+                    boardLetterText.get(0).setText("");
+                    boardLetterText.get(1).setText("");
+                }
             }
         }
     }
@@ -129,19 +206,77 @@ public class GameController {
         }
     }
 
+    private void refreshAvailableLetters() {
+        Letter[] letters = State.getAvailableLetters().getLetters();
+
+        for (int i = 0; i < 7; i++) {
+            ObservableList<Text> availableLetterText = getTextOnLetter(0, i, lettersGrid);
+
+            if (letters[i] != null) {
+                Character letterChar = letters[i].getCharacter();
+                Integer letterPoints = letters[i].getPoints();
+                availableLetterText.get(0).setText(letterChar.toString());
+                availableLetterText.get(1).setText(letterPoints.toString());
+            } else {
+                availableLetterText.get(0).setText("");
+                availableLetterText.get(1).setText("");
+            }
+        }
+    }
+
     public void onExchange(ActionEvent actionEvent) {
+        // TODO if editable...
     }
 
     public void onPass(ActionEvent actionEvent) {
         // TODO send pass to the servers
+        // TODO if editable...
     }
 
     public void onConfirm(ActionEvent actionEvent) {
-        // TODO check if word is correct,
-        // TODO if it is, send board and player to server
+        // TODO if editable...
+        resultLabel.setText("");
+
+        Board board = State.getBoard();
+        if (!board.wordInRow() && !board.wordInColumn()) {
+            resultLabel.setText("Letter tiles must be aligned in either one row or column.");
+            return;
+        }
+
+        if (board.isFirstMove() && board.isMiddleSlotFree()) {
+            resultLabel.setText("In first move you have to put a letter in the middle of the board.");
+            return;
+        }
+
+        ArrayList<String> words = board.getAddedWords();
+        boolean allValid = verifier.verifyAll(words);
+
+        if (!allValid) {
+            ArrayList<String> invalid = verifier.getInvalid();
+            resultLabel.setText("Invalid word: " + invalid.get(0));
+            return;
+        }
+
+        Integer score = counter.countCurrentScore();
+        System.out.println(score);
+
+        // TODO send board, remaining available letters and user score
+
+        State.getPlayer().addPoints(score);
+        board.saveBoard();
+        refreshGameBoard();
+        // TODO save letters
+        resetIndexes();
+        State.setMyTurn(false);
+        // TODO set editable to false
+
+
+        userScore.setText(State.getPlayer().getPoints().toString());
+        resultLabel.setText("Correct. Sending the board!");
     }
 
     public void onBoardRect(MouseEvent mouseEvent) {
+        // TODO if editable...
         Node source = (Node)mouseEvent.getSource() ;
         Integer colIndex = GridPane.getColumnIndex(source);
         Integer rowIndex = GridPane.getRowIndex(source);
@@ -189,7 +324,7 @@ public class GameController {
     private void withdrawLetterFromBoard() {
         Letter letter = State.getBoard().getLetters()[boardLetterRowIndex][boardLetterColumnIndex];
 
-        if (letter.isDraggable()) {
+        if (letter != null && letter.isDraggable()) {
             Character letterChar = letter.getCharacter();
             Integer letterPoints = letter.getPoints();
             Integer slotNumber = State.getAvailableLetters().setLetterFirstFree(letter);
@@ -229,6 +364,20 @@ public class GameController {
         return texts;
     }
 
+    private Rectangle getRectangle(Integer row, Integer col, GridPane pane) {
+        ObservableList<Node> children = pane.getChildren();
+        Rectangle rect = null;
+
+        for (Node node : children) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col && node instanceof Rectangle) {
+                rect = (Rectangle)node;
+                break;
+            }
+        }
+
+        return rect;
+    }
+
     private void resetIndexes() {
         boardLetterColumnIndex = null;
         boardLetterRowIndex = null;
@@ -236,6 +385,7 @@ public class GameController {
     }
 
     public void onAvailableRect(MouseEvent mouseEvent) {
+        // TODO if editable...
         Node source = (Node)mouseEvent.getSource();
         Integer colIndex = GridPane.getColumnIndex(source);
 

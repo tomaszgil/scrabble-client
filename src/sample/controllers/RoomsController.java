@@ -61,7 +61,7 @@ public class RoomsController {
     public void play(ActionEvent actionEvent) throws IOException {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
 
-        if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) {
+        if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) { // TODO verify on server
             connector.outputStreamWriter.write(selectedRoom.getName().concat("\0"));
             connector.outputStreamWriter.flush();
             State.setRoom(selectedRoom);
@@ -79,8 +79,7 @@ public class RoomsController {
 
             Board board = new Board(boardLetters);
             State.setBoard(board);
-
-            data = null;
+            
             data = connector.receiveMessage(14);
             Character[] letters = new Character[7];
 
@@ -91,6 +90,8 @@ public class RoomsController {
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
 
+            State.setMyTurn(true);
+
             ArrayList<Player> otherPlayers = new ArrayList<>();
             data = null;
             data = connector.receiveMessage(100);
@@ -100,8 +101,6 @@ public class RoomsController {
             if(numberOfUsers!='0'){
                 int max = Integer.parseInt(data[0]);
                 for(int i =1; i<max*2; i=i+2){
-                    System.out.println(data[i]);
-                    System.out.println(data[i+1]);
                     otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
                 }
             }

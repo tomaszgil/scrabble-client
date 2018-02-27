@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.LoginController">
    <children>
-      <Label layoutX="94.0" layoutY="198.0" text="Nazwa użytkownika">
+      <Label layoutX="94.0" layoutY="198.0" text="User name">
          <font>
             <Font size="18.0" />
          </font>
@@ -23,7 +23,7 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Button fx:id="buttonLogin" layoutX="94.0" layoutY="326.0" mnemonicParsing="false" onAction="#login" prefHeight="43.0" prefWidth="143.0" text="Dalej">
+      <Button fx:id="buttonLogin" layoutX="94.0" layoutY="326.0" mnemonicParsing="false" onAction="#login" prefHeight="43.0" prefWidth="143.0" text="Next">
          <font>
             <Font size="18.0" />
          </font>
