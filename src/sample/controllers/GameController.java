@@ -18,8 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import sample.State;
+import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Player;
+import sample.utils.SceneSwitcher;
+import sample.utils.WordVerifier;
 
 import java.sql.Array;
 import java.sql.SQLOutput;
@@ -50,13 +53,21 @@ public class GameController {
     public GridPane boardGrid;
     @FXML
     public GridPane lettersGrid;
+    @FXML
+    public Label resultLabel;
+    @FXML
+    public Label roomLabel;
 
     private ObservableList<Player> opponentsData = FXCollections.observableArrayList();
+    private SceneSwitcher switcher;
+    private WordVerifier verifier;
     private Integer availableLetterIndex;
     private Integer boardLetterRowIndex;
     private Integer boardLetterColumnIndex;
 
     public GameController() {
+        switcher = new SceneSwitcher();
+        verifier = new WordVerifier();
         availableLetterIndex = null;
         boardLetterRowIndex = null;
         boardLetterColumnIndex = null;
@@ -66,6 +77,7 @@ public class GameController {
     public void initialize() {
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
+        roomLabel.setText(State.getRoom().getName());
 
         opponentNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("name"));
         opponentScoreColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("points"));
@@ -74,6 +86,16 @@ public class GameController {
 
         setupGameBoard();
         setupAvailableLetters();
+    }
+
+    private void refreshUserLabels() {
+        userName.setText(State.getPlayer().getName());
+        userScore.setText(State.getPlayer().getPoints().toString());
+    }
+
+    private void refreshOpponentsTable() {
+        opponentsData.setAll(State.getOtherPlayers());
+        opponentsResults.setItems(opponentsData);
     }
 
     private void setupGameBoard() {
@@ -101,6 +123,26 @@ public class GameController {
         }
     }
 
+    private void refreshGameBoard() {
+        Letter[][] letters = State.getBoard().getLetters();
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                ObservableList<Text> boardLetterText = getTextOnLetter(boardLetterRowIndex, boardLetterColumnIndex, boardGrid);
+
+                if (letters[i][j] != null) {
+                    Character letterChar = letters[i][j].getCharacter();
+                    Integer letterPoints = letters[i][j].getPoints();
+                    boardLetterText.get(0).setText(letterChar.toString());
+                    boardLetterText.get(1).setText(letterPoints.toString());
+                } else {
+                    boardLetterText.get(0).setText("");
+                    boardLetterText.get(1).setText("");
+                }
+            }
+        }
+    }
+
     private void setupAvailableLetters() {
         Letter[] letters = State.getAvailableLetters().getLetters();
 
@@ -124,6 +166,24 @@ public class GameController {
         }
     }
 
+    private void refreshAvailableLetters() {
+        Letter[] letters = State.getAvailableLetters().getLetters();
+
+        for (int i = 0; i < 7; i++) {
+            ObservableList<Text> availableLetterText = getTextOnLetter(0, availableLetterIndex, lettersGrid);
+
+            if (letters[i] != null) {
+                Character letterChar = letters[i].getCharacter();
+                Integer letterPoints = letters[i].getPoints();
+                availableLetterText.get(0).setText(letterChar.toString());
+                availableLetterText.get(1).setText(letterPoints.toString());
+            } else {
+                availableLetterText.get(0).setText("");
+                availableLetterText.get(1).setText("");
+            }
+        }
+    }
+
     public void onExchange(ActionEvent actionEvent) {
     }
 
@@ -132,8 +192,29 @@ public class GameController {
     }
 
     public void onConfirm(ActionEvent actionEvent) {
-        // TODO check if word is correct,
-        // TODO if it is, send board and player to server
+        resultLabel.setText("");
+
+        Board board = State.getBoard();
+        if (!board.wordInRow() && !board.wordInColumn()) {
+            resultLabel.setText("Letter tiles must be aligned in either one row or column.");
+            return;
+        }
+
+        if (board.isFirstMove() && board.isMiddleSlotFree()) {
+            resultLabel.setText("In first move you have to put a letter in the middle of the board.");
+            return;
+        }
+
+        ArrayList<String> words = board.getAddedWords();
+        boolean allValid = verifier.verifyAll(words);
+
+        if (!allValid) {
+            ArrayList<String> invalid = verifier.getInvalid();
+            resultLabel.setText("Invalid word: " + invalid.get(0));
+            return;
+        }
+
+        resultLabel.setText("Correct. Sending the board!");
     }
 
     public void onBoardRect(MouseEvent mouseEvent) {
@@ -184,7 +265,7 @@ public class GameController {
     private void withdrawLetterFromBoard() {
         Letter letter = State.getBoard().getLetters()[boardLetterRowIndex][boardLetterColumnIndex];
 
-        if (letter.isDraggable()) {
+        if (letter != null && letter.isDraggable()) {
             Character letterChar = letter.getCharacter();
             Integer letterPoints = letter.getPoints();
             Integer slotNumber = State.getAvailableLetters().setLetterFirstFree(letter);
