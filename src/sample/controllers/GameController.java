@@ -20,10 +20,13 @@ import javafx.scene.text.Text;
 import sample.State;
 import sample.models.Letter;
 import sample.models.Player;
+import sample.utils.ServerCommunicator;
 
 import java.sql.Array;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+
+import static sample.Main.connector;
 
 public class GameController {
     @FXML
@@ -64,6 +67,8 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        connector.serverCommunicator.thread.start();
+
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
 

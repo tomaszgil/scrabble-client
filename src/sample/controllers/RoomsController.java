@@ -11,6 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import sample.State;
 import sample.models.*;
 import sample.utils.SceneSwitcher;
+import sample.utils.ServerCommunicator;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -88,7 +90,7 @@ public class RoomsController {
 
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
-            
+
             ArrayList<Player> otherPlayers = new ArrayList<>();
             data = null;
             data = connector.receiveMessage(100);

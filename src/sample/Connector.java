@@ -1,5 +1,7 @@
 package sample;
 
+import sample.utils.ServerCommunicator;
+
 import java.io.*;
 import java.net.*;
 
@@ -11,6 +13,8 @@ public class Connector {
     public OutputStreamWriter outputStreamWriter;
     public InputStreamReader inputStreamReader;
     public BufferedReader bufferedReader;
+    public ServerCommunicator serverCommunicator;
+
 
     Connector(){
         try {
@@ -18,6 +22,7 @@ public class Connector {
             outputStreamWriter = new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8");
             inputStreamReader = new InputStreamReader(clientSocket.getInputStream(), "UTF-8");
             bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            serverCommunicator = new ServerCommunicator();
         } catch (IOException e) {
             e.printStackTrace();
         }
