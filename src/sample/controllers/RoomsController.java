@@ -49,12 +49,7 @@ public class RoomsController {
     }
 
     private void getRooms() throws IOException{
-        char buf[] = new char[50];
-
-        connector.inputStreamReader.read(buf);
-
-        String message = String.valueOf(buf);
-        String [] data = message.split("\\_");
+        String [] data = connector.receiveMessage(50);
 
         ArrayList<Room> rooms = new ArrayList<>();
         for(int i=0; i<=10; i=i+2){
@@ -72,12 +67,8 @@ public class RoomsController {
             connector.outputStreamWriter.flush();
             State.setRoom(selectedRoom);
 
-            char bufor[] = new char[450];
-            connector.inputStreamReader.read(bufor);
+            String [] data = connector.receiveMessage(450);
 
-            String message = String.valueOf(bufor);
-            System.out.println(message);
-            String [] data = message.split("\\_");
             int z =0;
             Character[][] boardLetters = new Character[15][15];
             for(int i =0; i<15;i++){
@@ -90,10 +81,14 @@ public class RoomsController {
             Board board = new Board(boardLetters);
             State.setBoard(board);
 
-            // TODO get user letters
-            Character[] letters = new Character[] {
-                    'A', 'D', 'A', 'M', '0', '0', '0'
-            };
+            data = null;
+            data = connector.receiveMessage(14);
+            Character[] letters = new Character[7];
+
+            for(int i =0; i<7; i++){
+                letters[i]=data[i].charAt(0);
+            }
+
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
 

@@ -3,6 +3,8 @@ package sample;
 import java.io.*;
 import java.net.*;
 
+import static sample.Main.connector;
+
 public class Connector {
 
     private Socket clientSocket;
@@ -27,5 +29,14 @@ public class Connector {
 
     public void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
+    }
+
+    public String[] receiveMessage(int sizeOfBuffer) throws IOException{
+        char bufor[] = new char[sizeOfBuffer];
+        connector.inputStreamReader.read(bufor);
+
+        String message = String.valueOf(bufor);
+        String [] data = message.split("\\_");
+        return data;
     }
 }
