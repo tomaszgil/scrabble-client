@@ -64,7 +64,7 @@ public class RoomsController {
     public void play(ActionEvent actionEvent) throws IOException {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
 
-        if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) {
+        if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) { // TODO verify on server
             connector.outputStreamWriter.write(selectedRoom.getName().concat("\0"));
             connector.outputStreamWriter.flush();
             State.setRoom(selectedRoom);

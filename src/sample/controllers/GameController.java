@@ -18,8 +18,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import sample.State;
+import sample.models.Board;
 import sample.models.Letter;
 import sample.models.Player;
+import sample.utils.SceneSwitcher;
 
 import java.sql.Array;
 import java.sql.SQLOutput;
@@ -50,13 +52,19 @@ public class GameController {
     public GridPane boardGrid;
     @FXML
     public GridPane lettersGrid;
+    @FXML
+    public Label resultLabel;
+    @FXML
+    public Label roomLabel;
 
     private ObservableList<Player> opponentsData = FXCollections.observableArrayList();
+    private SceneSwitcher switcher;
     private Integer availableLetterIndex;
     private Integer boardLetterRowIndex;
     private Integer boardLetterColumnIndex;
 
     public GameController() {
+        switcher = new SceneSwitcher();
         availableLetterIndex = null;
         boardLetterRowIndex = null;
         boardLetterColumnIndex = null;
@@ -66,6 +74,7 @@ public class GameController {
     public void initialize() {
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
+        roomLabel.setText(State.getRoom().getName());
 
         opponentNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("name"));
         opponentScoreColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("points"));
@@ -132,8 +141,26 @@ public class GameController {
     }
 
     public void onConfirm(ActionEvent actionEvent) {
-        // TODO check if word is correct,
-        // TODO if it is, send board and player to server
+        Board board = State.getBoard();
+        if (!board.wordInRow() && !board.wordInColumn()) {
+            resultLabel.setText("Letter tiles must be aligned in either one row or column.");
+            return;
+        }
+
+        if (board.isFirstMove() && board.isMiddleSlotFree()) {
+            resultLabel.setText("In first move you have to put a letter in the middle of the board.");
+            return;
+        }
+
+        ArrayList<String> invalid = board.getAllWords();
+
+        if (!board.verifyAllWords()) {
+            resultLabel.setText("In first move you have to put a letter in the middle of the board.");
+            return;
+        }
+        // TODO get and veify words
+
+        resultLabel.setText("Correct. Sending the board!");
     }
 
     public void onBoardRect(MouseEvent mouseEvent) {
@@ -184,7 +211,7 @@ public class GameController {
     private void withdrawLetterFromBoard() {
         Letter letter = State.getBoard().getLetters()[boardLetterRowIndex][boardLetterColumnIndex];
 
-        if (letter.isDraggable()) {
+        if (letter != null && letter.isDraggable()) {
             Character letterChar = letter.getCharacter();
             Integer letterPoints = letter.getPoints();
             Integer slotNumber = State.getAvailableLetters().setLetterFirstFree(letter);
