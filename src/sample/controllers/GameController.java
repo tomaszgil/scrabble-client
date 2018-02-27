@@ -88,6 +88,16 @@ public class GameController {
         setupAvailableLetters();
     }
 
+    private void refreshUserLabels() {
+        userName.setText(State.getPlayer().getName());
+        userScore.setText(State.getPlayer().getPoints().toString());
+    }
+
+    private void refreshOpponentsTable() {
+        opponentsData.setAll(State.getOtherPlayers());
+        opponentsResults.setItems(opponentsData);
+    }
+
     private void setupGameBoard() {
         Letter[][] letters = State.getBoard().getLetters();
 
