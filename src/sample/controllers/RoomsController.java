@@ -88,12 +88,21 @@ public class RoomsController {
 
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
-
-            // TODO get other clients
+            
             ArrayList<Player> otherPlayers = new ArrayList<>();
-            otherPlayers.add(new Player("mietek", 4));
-            otherPlayers.add(new Player("zdzisiek", 20));
-            otherPlayers.add(new Player("wacek", 17));
+            data = null;
+            data = connector.receiveMessage(100);
+
+            char numberOfUsers = data[0].charAt(0);
+
+            if(numberOfUsers!='0'){
+                int max = Integer.parseInt(data[0]);
+                for(int i =1; i<max*2; i=i+2){
+                    System.out.println(data[i]);
+                    System.out.println(data[i+1]);
+                    otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
+                }
+            }
             State.setOtherPlayers(otherPlayers);
 
             switcher.switchTo("game", actionEvent);
