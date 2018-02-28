@@ -81,7 +81,7 @@ public class Board {
         return true;
     }
 
-    private ArrayList<Integer> getFirstUserLetterCoords() {
+    public ArrayList<Integer> getFirstUserLetterCoords() {
         ArrayList<Integer> coords = new ArrayList<>();
         Integer i, j = 0;
         boolean foundFirstLetter = false;

@@ -77,8 +77,7 @@ public class RoomsController {
 
             Board board = new Board(boardLetters);
             State.setBoard(board);
-
-            data = null;
+            
             data = connector.receiveMessage(14);
             Character[] letters = new Character[7];
 
@@ -90,7 +89,7 @@ public class RoomsController {
             State.setAvailableLetters(availableLetters);
 
             // TODO check if this is my turn
-            // State.setMyTurn(true);
+            State.setMyTurn(true);
 
             // TODO get other clients
             ArrayList<Player> otherPlayers = new ArrayList<>();

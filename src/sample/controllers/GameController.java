@@ -133,7 +133,7 @@ public class GameController {
 
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                ObservableList<Text> boardLetterText = getTextOnLetter(boardLetterRowIndex, boardLetterColumnIndex, boardGrid);
+                ObservableList<Text> boardLetterText = getTextOnLetter(i, j, boardGrid);
 
                 if (letters[i][j] != null) {
                     Character letterChar = letters[i][j].getCharacter();
@@ -175,7 +175,7 @@ public class GameController {
         Letter[] letters = State.getAvailableLetters().getLetters();
 
         for (int i = 0; i < 7; i++) {
-            ObservableList<Text> availableLetterText = getTextOnLetter(0, availableLetterIndex, lettersGrid);
+            ObservableList<Text> availableLetterText = getTextOnLetter(0, i, lettersGrid);
 
             if (letters[i] != null) {
                 Character letterChar = letters[i].getCharacter();
@@ -222,7 +222,8 @@ public class GameController {
             return;
         }
 
-        Integer score = counter.countPoints(board.getLetters());
+        Integer score = counter.countCurrentScore();
+        System.out.println(score);
 
         // TODO send board, remaining available letters and user score
 
@@ -232,6 +233,7 @@ public class GameController {
         // TODO save letters
         resetIndexes();
         State.setMyTurn(false);
+        // TODO set editable to false
 
 
         userScore.setText(State.getPlayer().getPoints().toString());
