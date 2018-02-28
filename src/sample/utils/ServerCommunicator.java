@@ -2,6 +2,7 @@ package sample.utils;
 
 import javafx.fxml.FXMLLoader;
 import sample.controllers.GameController;
+import sample.models.Board;
 import sample.models.Player;
 import sample.State;
 
@@ -45,11 +46,28 @@ public class ServerCommunicator {
                    }else if(data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
-                       data = connector.receiveMessage(475);
+                       data = connector.receiveMessage(480);
 
-                       for(int i=0; i<data.length; i++){
-                           System.out.println(data[i]);
+                       System.out.println(data.length);
+
+                       String player = data[0];
+                       String new_score = data[1];
+
+                       System.out.println(player);
+                       System.out.println(new_score);
+
+                       int z = 2;
+                       Character[][] boardLetters = new Character[15][15];
+                       for(int i=0; i<15;i++){
+                           for(int j=0; j<15; j++){
+                               boardLetters[i][j]=data[z].charAt(0);
+                               System.out.print(boardLetters[i][j]);
+                               z++;
+                           }
                        }
+                        
+                       Board board = new Board(boardLetters);
+                       sample.State.setBoard(board);
 
                    }
                }catch (Exception e){}

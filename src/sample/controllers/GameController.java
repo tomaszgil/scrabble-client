@@ -89,7 +89,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
-
+        connector.serverCommunicator.thread.setDaemon(true);
         connector.serverCommunicator.thread.start();
 
         userName.setText(State.getPlayer().getName());
