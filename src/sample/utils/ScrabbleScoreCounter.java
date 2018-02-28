@@ -160,7 +160,7 @@ public class ScrabbleScoreCounter {
     private Integer calculateMultiplier(Integer i, Integer j) {
         Integer multiplier = 1;
 
-        if (letters[i][j].isDraggable()) {
+        if (letters[i][j] != null && letters[i][j].isDraggable()) {
             if (ScrabbleBoard.isDoubleWord(i, j)) {
                 multiplier *= 2;
             } else if (ScrabbleBoard.isTripleWord(i, j)) {
@@ -174,7 +174,7 @@ public class ScrabbleScoreCounter {
     private Integer calculateLetterScore(Integer i, Integer j) {
         Integer score = 0;
 
-        if (letters[i][j].isDraggable()) {
+        if (letters[i][j] != null && letters[i][j].isDraggable()) {
             if (ScrabbleBoard.isDoubleLetter(i, j)) {
                 score += 2 * letters[i][j].getPoints();
             } else if (ScrabbleBoard.isTripleLetter(i, j)) {

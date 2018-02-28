@@ -348,5 +348,10 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
+      <Label fx:id="turnLabel" layoutX="14.0" layoutY="800.0" prefHeight="15.0" prefWidth="274.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
