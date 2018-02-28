@@ -1,23 +1,21 @@
 package sample.utils;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import sample.controllers.GameController;
 import sample.models.Board;
 import sample.models.Player;
-import sample.State;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static sample.Main.connector;
 
 public class ServerCommunicator {
-    private GameController gameController;
+    private GameController controller;
 
-    public void setGameController(GameController gameController){
-        this.gameController = gameController;
+    public void setController(GameController gameController){
+        this.controller = gameController;
     }
-
 
     public Thread thread = new Thread() {
 
@@ -43,34 +41,28 @@ public class ServerCommunicator {
                        }
 
                        sample.State.setOtherPlayers(otherPlayers);
+                       controller.refreshOpponentsTable();
                    }else if(data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
                        data = connector.receiveMessage(480);
 
-                       System.out.println(data.length);
-
                        String player = data[0];
                        String new_score = data[1];
-
-                       System.out.println(player);
-                       System.out.println(new_score);
 
                        int z = 2;
                        Character[][] boardLetters = new Character[15][15];
                        for(int i=0; i<15;i++){
                            for(int j=0; j<15; j++){
                                boardLetters[i][j]=data[z].charAt(0);
-                               System.out.print(boardLetters[i][j]);
                                z++;
                            }
                        }
                         
                        Board board = new Board(boardLetters);
                        sample.State.setBoard(board);
-
                    }
-               }catch (Exception e){}
+               } catch (Exception e) { e.printStackTrace(); }
            }
        }
    };

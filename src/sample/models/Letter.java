@@ -14,6 +14,10 @@ public class Letter {
         this.draggable = draggable;
     }
 
+    public String toString() {
+        return character.toString();
+    }
+
     public Character getCharacter() {
         return character;
     }

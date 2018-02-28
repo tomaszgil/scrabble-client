@@ -3,6 +3,7 @@ package sample.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.WindowEvent;
 import sample.State;
 import sample.models.Board;
 import sample.models.Letter;
@@ -26,11 +28,10 @@ import sample.models.Player;
 import sample.utils.SceneSwitcher;
 import sample.utils.ScrabbleScoreCounter;
 import sample.utils.WordVerifier;
-
-
 import java.io.IOException;
 import java.sql.Array;
 import java.sql.SQLOutput;
+
 import java.util.ArrayList;
 
 import static sample.Main.connector;
@@ -90,6 +91,7 @@ public class GameController {
     @FXML
     public void initialize() {
         connector.serverCommunicator.thread.setDaemon(true);
+        connector.serverCommunicator.setController(this);
         connector.serverCommunicator.thread.start();
 
         userName.setText(State.getPlayer().getName());
@@ -123,6 +125,8 @@ public class GameController {
     }
 
     public void refreshOpponentsTable() {
+        System.out.println("REFRESH TABLE!");
+
         opponentsData.setAll(State.getOtherPlayers());
         opponentsResults.setItems(opponentsData);
     }
@@ -146,9 +150,9 @@ public class GameController {
                     letter.setText(letters[i][j].getCharacter().toString());
                     points.setText(letters[i][j].getPoints().toString());
 
-                    if (letters[i][j].isDraggable()) {
+                    if (letters[i][j] != null && letters[i][j].isDraggable()) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
-                    } else {
+                    } else if (letters[i][j] != null) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
                     }
                 }
@@ -161,8 +165,8 @@ public class GameController {
     private void refreshGameBoard() {
         Letter[][] letters = State.getBoard().getLetters();
 
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
+        for (Integer i = 0; i < 15; i++) {
+            for (Integer j = 0; j < 15; j++) {
                 ObservableList<Text> boardLetterText = getTextOnLetter(i, j, boardGrid);
 
                 if (letters[i][j] != null) {
@@ -171,9 +175,9 @@ public class GameController {
                     boardLetterText.get(0).setText(letterChar.toString());
                     boardLetterText.get(1).setText(letterPoints.toString());
 
-                    if (letters[i][j].isDraggable()) {
+                    if (letters[i][j] != null && letters[i][j].isDraggable()) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
-                    } else {
+                    } else if (letters[i][j] != null) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
                     }
                 } else {
@@ -227,11 +231,21 @@ public class GameController {
 
     public void onExchange(ActionEvent actionEvent) {
         // TODO if editable...
+        switcher.openInModal("initiateSwap", "Send a swap request", null);
     }
 
     public void onPass(ActionEvent actionEvent) {
         // TODO send pass to the servers
         // TODO if editable...
+
+        // Temporary
+        EventHandler<WindowEvent> closeHandler = new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                refreshAvailableLetters();
+            }
+        };
+
+        switcher.openInModal("respondToSwap", "Request incoming", closeHandler);
     }
 
     public void onConfirm(ActionEvent actionEvent) throws IOException{
@@ -246,6 +260,9 @@ public class GameController {
 
         if (board.isFirstMove() && board.isMiddleSlotFree()) {
             resultLabel.setText("In first move you have to put a letter in the middle of the board.");
+            return;
+        } else if (!board.isFirstMove() && !board.isNewWordConnected()) {
+            resultLabel.setText("Use at least one letter already placed on the board.");
             return;
         }
 

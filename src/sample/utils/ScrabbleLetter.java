@@ -51,6 +51,10 @@ public final class ScrabbleLetter {
         lettersPoints.put('Z', 10);
     }
 
+    public static Character[] getLetters() {
+        return letters;
+    }
+
     public static Integer getPointsForLetter(Character letter) {
         return lettersPoints.get(letter);
     }
