@@ -3,6 +3,7 @@ package sample.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.WindowEvent;
 import sample.State;
 import sample.models.Board;
 import sample.models.Letter;
@@ -27,8 +29,6 @@ import sample.utils.SceneSwitcher;
 import sample.utils.ScrabbleScoreCounter;
 import sample.utils.WordVerifier;
 
-import java.sql.Array;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class GameController {
@@ -225,6 +225,15 @@ public class GameController {
     public void onPass(ActionEvent actionEvent) {
         // TODO send pass to the servers
         // TODO if editable...
+
+        // Temporary
+        EventHandler<WindowEvent> closeHandler = new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                refreshAvailableLetters();
+            }
+        };
+
+        switcher.openInModal("respondToSwap", "Request incoming", closeHandler);
     }
 
     public void onConfirm(ActionEvent actionEvent) {
