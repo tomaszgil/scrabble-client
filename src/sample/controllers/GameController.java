@@ -138,9 +138,9 @@ public class GameController {
                     letter.setText(letters[i][j].getCharacter().toString());
                     points.setText(letters[i][j].getPoints().toString());
 
-                    if (letters[i][j].isDraggable()) {
+                    if (letters[i][j] != null && letters[i][j].isDraggable()) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
-                    } else {
+                    } else if (letters[i][j] != null) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
                     }
                 }
@@ -153,8 +153,8 @@ public class GameController {
     private void refreshGameBoard() {
         Letter[][] letters = State.getBoard().getLetters();
 
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
+        for (Integer i = 0; i < 15; i++) {
+            for (Integer j = 0; j < 15; j++) {
                 ObservableList<Text> boardLetterText = getTextOnLetter(i, j, boardGrid);
 
                 if (letters[i][j] != null) {
@@ -163,9 +163,9 @@ public class GameController {
                     boardLetterText.get(0).setText(letterChar.toString());
                     boardLetterText.get(1).setText(letterPoints.toString());
 
-                    if (letters[i][j].isDraggable()) {
+                    if (letters[i][j] != null && letters[i][j].isDraggable()) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
-                    } else {
+                    } else if (letters[i][j] != null) {
                         getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
                     }
                 } else {
@@ -219,6 +219,7 @@ public class GameController {
 
     public void onExchange(ActionEvent actionEvent) {
         // TODO if editable...
+        switcher.openInModal("initiateSwap", "Send a swap request", null);
     }
 
     public void onPass(ActionEvent actionEvent) {
@@ -238,6 +239,9 @@ public class GameController {
 
         if (board.isFirstMove() && board.isMiddleSlotFree()) {
             resultLabel.setText("In first move you have to put a letter in the middle of the board.");
+            return;
+        } else if (!board.isFirstMove() && !board.isNewWordConnected()) {
+            resultLabel.setText("Use at least one letter already placed on the board.");
             return;
         }
 

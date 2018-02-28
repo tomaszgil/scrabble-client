@@ -182,7 +182,7 @@ public class ScrabbleScoreCounter {
             } else {
                 score += letters[i][j].getPoints();
             }
-        } else {
+        } else if (letters[i][j] != null) {
             score += letters[i][j].getPoints();
         }
 
