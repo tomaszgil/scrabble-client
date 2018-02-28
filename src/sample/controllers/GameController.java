@@ -15,6 +15,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import sample.State;
@@ -58,6 +60,8 @@ public class GameController {
     public Label resultLabel;
     @FXML
     public Label roomLabel;
+    @FXML
+    public Label turnLabel;
 
     private ObservableList<Player> opponentsData = FXCollections.observableArrayList();
     private SceneSwitcher switcher;
@@ -84,6 +88,12 @@ public class GameController {
         userScore.setText(State.getPlayer().getPoints().toString());
         roomLabel.setText(State.getRoom().getName());
 
+        if (State.isMyTurn()) {
+            turnLabel.setText("Your turn!");
+        } else {
+            turnLabel.setText("");
+        }
+
         opponentNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("name"));
         opponentScoreColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("points"));
         opponentsData.setAll(State.getOtherPlayers());
@@ -96,6 +106,12 @@ public class GameController {
     private void refreshUserLabels() {
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
+
+        if (State.isMyTurn()) {
+            turnLabel.setText("Your turn!");
+        } else {
+            turnLabel.setText("");
+        }
     }
 
     private void refreshOpponentsTable() {
@@ -121,6 +137,12 @@ public class GameController {
                 if (letters[i][j] != null) {
                     letter.setText(letters[i][j].getCharacter().toString());
                     points.setText(letters[i][j].getPoints().toString());
+
+                    if (letters[i][j].isDraggable()) {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
+                    } else {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
+                    }
                 }
                 box.getChildren().addAll(letter, points);
                 boardGrid.add(box, j, i);
@@ -140,6 +162,12 @@ public class GameController {
                     Integer letterPoints = letters[i][j].getPoints();
                     boardLetterText.get(0).setText(letterChar.toString());
                     boardLetterText.get(1).setText(letterPoints.toString());
+
+                    if (letters[i][j].isDraggable()) {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f5f2ea"));
+                    } else {
+                        getRectangle(i, j, boardGrid).setFill(Color.valueOf("#f4e2b0"));
+                    }
                 } else {
                     boardLetterText.get(0).setText("");
                     boardLetterText.get(1).setText("");
@@ -327,6 +355,20 @@ public class GameController {
         }
 
         return texts;
+    }
+
+    private Rectangle getRectangle(Integer row, Integer col, GridPane pane) {
+        ObservableList<Node> children = pane.getChildren();
+        Rectangle rect = null;
+
+        for (Node node : children) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col && node instanceof Rectangle) {
+                rect = (Rectangle)node;
+                break;
+            }
+        }
+
+        return rect;
     }
 
     private void resetIndexes() {
