@@ -81,6 +81,26 @@ public class Board {
         return true;
     }
 
+    public boolean isNewWordConnected() {
+        for (Integer i = 0; i < 15; i++) {
+            for (Integer j = 0; j < 15; j++) {
+                if (letters[i][j] != null && letters[i][j].isDraggable()) {
+                    if (i - 1 >= 0 && letters[i - 1][j] != null && !letters[i - 1][j].isDraggable()) {
+                        return true;
+                    } else if (j - 1 >= 0 && letters[i][j - 1] != null && !letters[i][j - 1].isDraggable()) {
+                        return true;
+                    } else if (i + 1 < 15 && letters[i + 1][j] != null && !letters[i + 1][j].isDraggable()) {
+                        return true;
+                    } else if (j + 1 < 15 && letters[i][j + 1] != null && !letters[i][j + 1].isDraggable()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public ArrayList<Integer> getFirstUserLetterCoords() {
         ArrayList<Integer> coords = new ArrayList<>();
         Integer i, j = 0;
