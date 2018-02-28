@@ -25,4 +25,6 @@ public class Player {
         this.points = points;
     }
 
+    public void addPoints(Integer points) { this.points += points; }
+
 }

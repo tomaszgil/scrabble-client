@@ -60,6 +60,11 @@ public class Board {
         letters[row][col] = letter;
     }
 
+    public void saveBoard() {
+        Character[][] map = getLetterMap();
+        setLetterMap(map);
+    }
+
     public boolean isFirstMove() {
         return firstMove;
     }
@@ -76,7 +81,7 @@ public class Board {
         return true;
     }
 
-    private ArrayList<Integer> getFirstUserLetterCoords() {
+    public ArrayList<Integer> getFirstUserLetterCoords() {
         ArrayList<Integer> coords = new ArrayList<>();
         Integer i, j = 0;
         boolean foundFirstLetter = false;
