@@ -42,6 +42,15 @@ public class ServerCommunicator {
                        }
 
                        sample.State.setOtherPlayers(otherPlayers);
+                   }else if(data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
+
+                       data = null;
+                       data = connector.receiveMessage(475);
+
+                       for(int i=0; i<data.length; i++){
+                           System.out.println(data[i]);
+                       }
+
                    }
                }catch (Exception e){}
            }
