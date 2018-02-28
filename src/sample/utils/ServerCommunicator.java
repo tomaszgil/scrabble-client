@@ -1,22 +1,20 @@
 package sample.utils;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import sample.controllers.GameController;
 import sample.models.Player;
-import sample.State;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static sample.Main.connector;
 
 public class ServerCommunicator {
-    private GameController gameController;
+    private GameController controller;
 
-    public void setGameController(GameController gameController){
-        this.gameController = gameController;
+    public void setController(GameController gameController){
+        this.controller = gameController;
     }
-
 
     public Thread thread = new Thread() {
 
@@ -42,8 +40,9 @@ public class ServerCommunicator {
                        }
 
                        sample.State.setOtherPlayers(otherPlayers);
+                       controller.refreshOpponentsTable();
                    }
-               }catch (Exception e){}
+               } catch (Exception e) { e.printStackTrace(); }
            }
        }
    };

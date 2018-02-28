@@ -88,7 +88,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
-
+        connector.serverCommunicator.setController(this);
         connector.serverCommunicator.thread.start();
 
         userName.setText(State.getPlayer().getName());
@@ -122,6 +122,8 @@ public class GameController {
     }
 
     public void refreshOpponentsTable() {
+        System.out.println("REFRESH TABLE!");
+
         opponentsData.setAll(State.getOtherPlayers());
         opponentsResults.setItems(opponentsData);
     }
