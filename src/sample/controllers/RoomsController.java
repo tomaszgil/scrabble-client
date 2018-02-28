@@ -11,6 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import sample.State;
 import sample.models.*;
 import sample.utils.SceneSwitcher;
+import sample.utils.ServerCommunicator;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -88,14 +90,20 @@ public class RoomsController {
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
 
-            // TODO check if this is my turn
             State.setMyTurn(true);
 
-            // TODO get other clients
             ArrayList<Player> otherPlayers = new ArrayList<>();
-            otherPlayers.add(new Player("mietek", 4));
-            otherPlayers.add(new Player("zdzisiek", 20));
-            otherPlayers.add(new Player("wacek", 17));
+            data = null;
+            data = connector.receiveMessage(100);
+
+            char numberOfUsers = data[0].charAt(0);
+
+            if(numberOfUsers!='0'){
+                int max = Integer.parseInt(data[0]);
+                for(int i =1; i<max*2; i=i+2){
+                    otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
+                }
+            }
             State.setOtherPlayers(otherPlayers);
 
             switcher.switchTo("game", actionEvent);
