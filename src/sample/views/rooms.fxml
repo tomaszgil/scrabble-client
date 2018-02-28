@@ -9,18 +9,18 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.RoomsController">
    <children>
-      <Label layoutX="62.0" layoutY="66.0" prefHeight="27.0" prefWidth="295.0" text="Wybierz pokój">
+      <Label layoutX="62.0" layoutY="66.0" prefHeight="27.0" prefWidth="295.0" text="Choose a room">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
       <TableView fx:id="roomList" layoutX="62.0" layoutY="118.0" prefHeight="264.0" prefWidth="677.0">
         <columns>
-          <TableColumn fx:id="nameColumn" prefWidth="514.0" text="Nazwa pokoju" />
-          <TableColumn fx:id="freeSlotsColumn" prefWidth="162.0" text="Liczba wolnych miejsc" />
+          <TableColumn fx:id="nameColumn" prefWidth="514.0" text="Room name" />
+          <TableColumn fx:id="freeSlotsColumn" prefWidth="162.0" text="Free slots" />
         </columns>
       </TableView>
-      <Button fx:id="playButton" layoutX="594.0" layoutY="405.0" mnemonicParsing="false" onAction="#play" prefHeight="41.0" prefWidth="145.0" text="Graj">
+      <Button fx:id="playButton" layoutX="594.0" layoutY="405.0" mnemonicParsing="false" onAction="#play" prefHeight="41.0" prefWidth="145.0" text="Play">
          <font>
             <Font size="17.0" />
          </font>
