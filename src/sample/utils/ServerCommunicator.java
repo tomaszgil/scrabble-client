@@ -45,12 +45,18 @@ public class ServerCommunicator {
                    }else if(data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
-                       data = connector.receiveMessage(480);
+                       data = connector.receiveMessage(482);
 
                        String player = data[0];
                        String new_score = data[1];
 
-                       int z = 2;
+                       if(data[2].charAt(0)=='t'){
+                           sample.State.setMyTurn(true);
+                       }else{
+                           sample.State.setMyTurn(false);
+                       }
+
+                       int z = 3;
                        Character[][] boardLetters = new Character[15][15];
                        for(int i=0; i<15;i++){
                            for(int j=0; j<15; j++){
