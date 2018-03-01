@@ -37,10 +37,9 @@ public class Connector {
     }
 
     public String[] receiveMessage(int sizeOfBuffer) throws IOException{
-        char bufor[] = new char[sizeOfBuffer];
-        connector.inputStreamReader.read(bufor);
-
-        String message = String.valueOf(bufor);
+        char buffer[] = new char[sizeOfBuffer];
+        connector.inputStreamReader.read(buffer);
+        String message = String.valueOf(buffer);
         String [] data = message.split("\\_");
         return data;
     }

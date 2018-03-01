@@ -436,4 +436,10 @@ public class GameController {
 
         availableLetterIndex = colIndex;
     }
+
+    public void onRoomQuit(ActionEvent actionEvent) {
+        // TODO handle quitting game
+        connector.serverCommunicator.thread.interrupt();
+        switcher.switchTo("rooms", actionEvent);
+    }
 }
