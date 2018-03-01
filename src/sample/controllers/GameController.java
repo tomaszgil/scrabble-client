@@ -162,7 +162,7 @@ public class GameController {
         }
     }
 
-    private void refreshGameBoard() {
+    public void refreshGameBoard() {
         Letter[][] letters = State.getBoard().getLetters();
 
         for (Integer i = 0; i < 15; i++) {
@@ -278,7 +278,10 @@ public class GameController {
         Integer score = counter.countCurrentScore();
         System.out.println(score);
 
-        // TODO send board, remaining available letters and user score
+        State.getPlayer().addPoints(score);
+        board.saveBoard();
+        refreshGameBoard();
+        resetIndexes();
 
         String message="1_";
 
@@ -305,16 +308,11 @@ public class GameController {
         connector.outputStreamWriter.write(message.concat("\0"));
         connector.outputStreamWriter.flush();
 
-        State.getPlayer().addPoints(score);
-        board.saveBoard();
-        refreshGameBoard();
-        // TODO save letters
-        resetIndexes();
         State.setMyTurn(false);
         // TODO set editable to false
 
 
-        userScore.setText(State.getPlayer().getPoints().toString());
+        refreshUserLabels();
         resultLabel.setText("Correct. Sending the board!");
     }
 

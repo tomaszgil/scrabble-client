@@ -6,6 +6,7 @@ import sample.controllers.GameController;
 import sample.models.Board;
 import sample.models.Player;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static sample.Main.connector;
@@ -48,7 +49,17 @@ public class ServerCommunicator {
                        data = connector.receiveMessage(480);
 
                        String player = data[0];
-                       String new_score = data[1];
+                       String newScore = data[1];
+
+                       System.out.println(player);
+                       System.out.println(newScore);
+
+                       ArrayList<Player> oppontents = sample.State.getOtherPlayers();
+                       for (Player opponent : oppontents) {
+                           if (opponent.getName().equals(player)) {
+                               opponent.setPoints(Integer.parseInt(newScore));
+                           }
+                       }
 
                        int z = 2;
                        Character[][] boardLetters = new Character[15][15];
@@ -61,6 +72,8 @@ public class ServerCommunicator {
                         
                        Board board = new Board(boardLetters);
                        sample.State.setBoard(board);
+                       controller.refreshGameBoard();
+                       controller.refreshOpponentsTable();
                    }
                } catch (Exception e) { e.printStackTrace(); }
            }
