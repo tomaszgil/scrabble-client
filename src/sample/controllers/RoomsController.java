@@ -96,8 +96,6 @@ public class RoomsController {
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
 
-            State.setMyTurn(true);
-
             ArrayList<Player> otherPlayers = new ArrayList<>();
             data = null;
             data = connector.receiveMessage(100);
