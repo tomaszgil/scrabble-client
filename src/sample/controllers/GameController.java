@@ -28,6 +28,10 @@ import sample.models.Player;
 import sample.utils.SceneSwitcher;
 import sample.utils.ScrabbleScoreCounter;
 import sample.utils.WordVerifier;
+import java.io.IOException;
+import java.sql.Array;
+import java.sql.SQLOutput;
+
 import java.util.ArrayList;
 
 import static sample.Main.connector;
@@ -86,6 +90,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        connector.serverCommunicator.thread.setDaemon(true);
         connector.serverCommunicator.setController(this);
         connector.serverCommunicator.thread.start();
 
@@ -243,7 +248,7 @@ public class GameController {
         switcher.openInModal("respondToSwap", "Request incoming", closeHandler);
     }
 
-    public void onConfirm(ActionEvent actionEvent) {
+    public void onConfirm(ActionEvent actionEvent) throws IOException{
         // TODO if editable...
         resultLabel.setText("");
 
@@ -274,6 +279,31 @@ public class GameController {
         System.out.println(score);
 
         // TODO send board, remaining available letters and user score
+
+        String message="1_";
+
+
+        message = message.concat(State.getPlayer().getName()).concat("_");
+
+        int length = String.valueOf(State.getPlayer().getPoints()).length();
+        if(length < 2){
+            message = message.concat("00").concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
+        }else if(length < 3){
+            message = message.concat("0").concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
+        }else{
+            message = message.concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
+        }
+
+        Character[][] letterMap = State.getBoard().getLetterMap();
+
+        for(int i=0; i<15;i++){
+            for(int j=0; j<15; j++){
+                message = message.concat(letterMap[i][j].toString()).concat("_");
+            }
+        }
+
+        connector.outputStreamWriter.write(message.concat("\0"));
+        connector.outputStreamWriter.flush();
 
         State.getPlayer().addPoints(score);
         board.saveBoard();
