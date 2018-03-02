@@ -453,6 +453,14 @@ public class GameController {
         ObservableList<Node> children = pane.getChildren();
         Rectangle rect = null;
 
+        if (row == 0) {
+            row = null; // inverse rakfx
+        }
+
+        if (col == 0) {
+            col = null; // inverse rakfx
+        }
+
         for (Node node : children) {
             if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col && node instanceof Rectangle) {
                 rect = (Rectangle)node;
