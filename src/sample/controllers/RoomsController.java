@@ -40,9 +40,7 @@ public class RoomsController {
 
     @FXML
     public void initialize() throws IOException{
-        if (State.getRoomList() == null) { // TODO remove when server will be sending rooms after logout
-            getRooms();
-        }
+        getRooms();
         nameColumn.setCellValueFactory(new PropertyValueFactory<Room, String>("name"));
         freeSlotsColumn.setCellValueFactory(new PropertyValueFactory<Room, Integer>("freeSlots"));
         roomsData.setAll(State.getRoomList());
@@ -50,8 +48,9 @@ public class RoomsController {
     }
 
     private void getRooms() throws IOException{
+        System.out.println("ROOOOOOOOOOOOMS");
         String [] data = connector.receiveMessage(50);
-
+        System.out.println("ROOOOOOOOOOOOOOOOMS");
         ArrayList<Room> rooms = new ArrayList<>();
         for(int i=0; i<=10; i=i+2){
             rooms.add(new Room(data[i], Integer.parseInt(data[i+1])));
