@@ -38,18 +38,25 @@ public class ServerCommunicator {
 
        @Override public void run() {
            while (running){
+               String [] data = null;
                try {
                    System.out.println("Oczekuje na dane");
-                   String[] data = connector.receiveMessage(2);
+                   data = connector.receiveMessage(2);
                    if(data != null && data[0].charAt(0) == '1'){ //New user in room
-
                        ArrayList<Player> otherPlayers = new ArrayList<>();
                        data = null;
                        data = connector.receiveMessage(100);
 
-                       char numberOfUsers = data[0].charAt(0);
+                       int numberOfUsers;
+                       try{
+                           numberOfUsers = Integer.parseInt(data[0]);
+                       }catch(NumberFormatException e){
+                            numberOfUsers=0;
+                       }
+                       //char numberOfUsers = data[0].charAt(0);
+                       System.out.println(numberOfUsers);
 
-                       if(numberOfUsers!='0'){
+                       if(numberOfUsers!=0){
                            int max = Integer.parseInt(data[0]);
                            for(int i =1; i<max*2; i=i+2){
                                System.out.println("Gracz " + data[i] + " score: " + data[i+1]);
@@ -59,16 +66,14 @@ public class ServerCommunicator {
 
                        sample.State.setOtherPlayers(otherPlayers);
                        controller.refreshOpponentsTable();
+                       data=null;
                    }else if(data != null && data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
-                       data = connector.receiveMessage(482);
+                       data = connector.receiveMessage(478);
 
                        String player = data[0];
                        String newScore = data[1];
-
-                       System.out.println(player);
-                       System.out.println(newScore);
 
                        ArrayList<Player> oppontents = sample.State.getOtherPlayers();
                        for (Player opponent : oppontents) {
@@ -107,6 +112,7 @@ public class ServerCommunicator {
                                controller.refreshOpponentsTable();
                            }
                        });
+                       data=null;
                    }else if(data != null && data[0].charAt(0) == '3'){// Refresh my avaible letters
                        data = null;
                        data = connector.receiveMessage(14);
@@ -114,13 +120,13 @@ public class ServerCommunicator {
 
                        Character[] letters = new Character[7];
 
-                       System.out.println(letters.length);
                        for(int i =0; i<7; i++){
                            letters[i]=data[0].charAt(i);
                        }
 
                        AvailableLetters availableLetters = new AvailableLetters(letters);
                        sample.State.setAvailableLetters(availableLetters);
+                       data =null;
                    }
                } catch (Exception e) {
                    System.out.println("EXCEPT");

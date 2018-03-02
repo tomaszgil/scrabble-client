@@ -39,8 +39,27 @@ public class Connector {
     public String[] receiveMessage(int sizeOfBuffer) throws IOException{
         char buffer[] = new char[sizeOfBuffer];
         connector.inputStreamReader.read(buffer);
+
         String message = String.valueOf(buffer);
         String [] data = message.split("\\_");
         return data;
+
+    }
+
+    public String[] receiveMessage(int sizeOfBuffer, int numberOfUsers) throws IOException{
+        char buffer[] = new char[sizeOfBuffer];
+        connector.inputStreamReader.read(buffer);
+
+        String message = String.valueOf(buffer);
+        String [] data = message.split("\\_");
+        String [] user_info = new String[numberOfUsers*2];
+        for(int i=0; i<numberOfUsers; i++)
+        {
+            user_info[i]=data[i];
+            System.out.println(data[i]);
+        }
+
+        return user_info;
+
     }
 }
