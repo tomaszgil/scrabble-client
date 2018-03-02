@@ -461,8 +461,6 @@ public class GameController {
             col = null; // inverse rakfx
         }
 
-        System.out.println(col);
-        System.out.println(pane);
         for (Node node : children) {
             if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col && node instanceof Rectangle) {
                 rect = (Rectangle)node;
