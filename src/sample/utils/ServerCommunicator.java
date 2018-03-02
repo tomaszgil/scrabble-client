@@ -95,8 +95,6 @@ public class ServerCommunicator {
                         
                        Board board = new Board(boardLetters);
                        sample.State.setBoard(board);
-                       controller.refreshGameBoard();
-                       controller.refreshOpponentsTable();
 
                        Platform.runLater(new Runnable() {
                            @Override
@@ -121,6 +119,13 @@ public class ServerCommunicator {
 
                        AvailableLetters availableLetters = new AvailableLetters(letters);
                        sample.State.setAvailableLetters(availableLetters);
+
+                       Platform.runLater(new Runnable() {
+                           @Override
+                           public void run() {
+                               controller.refreshAvailableLetters();
+                           }
+                       });
                    }
                } catch (Exception e) {
                    System.out.println("EXCEPT");
