@@ -42,7 +42,6 @@ public class RoomsController {
 
     @FXML
     public void initialize() throws IOException{
-        System.out.println("INITIALIZER");
         getRooms();
         nameColumn.setCellValueFactory(new PropertyValueFactory<Room, String>("name"));
         freeSlotsColumn.setCellValueFactory(new PropertyValueFactory<Room, Integer>("freeSlots"));
@@ -61,22 +60,19 @@ public class RoomsController {
             State.setRoomList(rooms);
             step++;
         }else{
-            System.out.println("KROK DRUGI");
             String [] data = connector.receiveMessage(1);
             while(data == null || data.length < 1|| data[0].length() < 1 || !data[0].equals("p")){
                 data = connector.receiveMessage(1);
             }
-           // System.out.println(data[0]);
-//            if(data[0].charAt(0) == 'A'){
-            String [] message = connector.receiveMessage(48);
-            System.out.println(message[0]);
 
-//                System.out.println(message);
+            String [] message = connector.receiveMessage(48);
+
+            message[0] = "Alp" + message[0];
             ArrayList<Room> rooms = new ArrayList<>();
             for(int i=0; i<=10; i=i+2){
-                System.out.println(message[i]  + "   " + message[i+1]);
-                //rooms.add(new Room("Alp" + message[i], Integer.parseInt(message[i+1])));
+                rooms.add(new Room( message[i], Integer.parseInt(message[i+1])));
             }
+            State.setRoomList(rooms);
         }
     }
 
