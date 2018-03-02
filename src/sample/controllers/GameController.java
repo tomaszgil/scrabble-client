@@ -85,7 +85,6 @@ public class GameController {
         boardLetterRowIndex = null;
         boardLetterColumnIndex = null;
         editable = State.isMyTurn();
-
     }
 
     @FXML
@@ -113,20 +112,28 @@ public class GameController {
         setupAvailableLetters();
     }
 
-    private void refreshUserLabels() {
+    public void updateEditability() {
+        if (State.isMyTurn()) {
+            editable = true;
+        } else {
+            editable = false;
+        }
+    }
+
+    public void refreshUserLabels() {
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
 
         if (State.isMyTurn()) {
+            System.out.println("MY TURN");
             turnLabel.setText("Your turn!");
         } else {
+            System.out.println("NOT MY TURN");
             turnLabel.setText("");
         }
     }
 
     public void refreshOpponentsTable() {
-        System.out.println("REFRESH TABLE!");
-
         opponentsData.setAll(State.getOtherPlayers());
         opponentsResults.setItems(opponentsData);
     }
@@ -230,13 +237,19 @@ public class GameController {
     }
 
     public void onExchange(ActionEvent actionEvent) {
-        // TODO if editable...
+        if (!editable) {
+            return;
+        }
+
         switcher.openInModal("initiateSwap", "Send a swap request", null);
     }
 
     public void onPass(ActionEvent actionEvent) {
+        if (!editable) {
+            return;
+        }
+
         // TODO send pass to the servers
-        // TODO if editable...
 
         // Temporary
         EventHandler<WindowEvent> closeHandler = new EventHandler<WindowEvent>() {
@@ -249,7 +262,10 @@ public class GameController {
     }
 
     public void onConfirm(ActionEvent actionEvent) throws IOException{
-        // TODO if editable...
+        if (!editable) {
+            return;
+        }
+
         resultLabel.setText("");
 
         Board board = State.getBoard();
@@ -279,6 +295,8 @@ public class GameController {
         System.out.println(score);
 
         State.getPlayer().addPoints(score);
+        State.setMyTurn(false);
+        updateEditability();
         board.saveBoard();
         refreshGameBoard();
         resetIndexes();
@@ -289,11 +307,11 @@ public class GameController {
         message = message.concat(State.getPlayer().getName()).concat("_");
 
         int length = String.valueOf(State.getPlayer().getPoints()).length();
-        if(length < 2){
+        if (length < 2) {
             message = message.concat("00").concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
-        }else if(length < 3){
+        } else if (length < 3) {
             message = message.concat("0").concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
-        }else{
+        } else {
             message = message.concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
         }
 
@@ -308,16 +326,15 @@ public class GameController {
         connector.outputStreamWriter.write(message.concat("\0"));
         connector.outputStreamWriter.flush();
 
-        State.setMyTurn(false);
-        // TODO set editable to false
-
-
         refreshUserLabels();
         resultLabel.setText("Correct. Sending the board!");
     }
 
     public void onBoardRect(MouseEvent mouseEvent) {
-        // TODO if editable...
+        if (!editable) {
+            return;
+        }
+
         Node source = (Node)mouseEvent.getSource() ;
         Integer colIndex = GridPane.getColumnIndex(source);
         Integer rowIndex = GridPane.getRowIndex(source);
@@ -426,7 +443,10 @@ public class GameController {
     }
 
     public void onAvailableRect(MouseEvent mouseEvent) {
-        // TODO if editable...
+        if (!editable) {
+            return;
+        }
+
         Node source = (Node)mouseEvent.getSource();
         Integer colIndex = GridPane.getColumnIndex(source);
 

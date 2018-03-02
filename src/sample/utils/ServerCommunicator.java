@@ -1,5 +1,6 @@
 package sample.utils;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import sample.controllers.GameController;
@@ -61,9 +62,10 @@ public class ServerCommunicator {
                            }
                        }
 
-                       if(data[2].charAt(0)=='t'){
+                       if (data[2].charAt(0) == 't') {
+                           System.out.println("SETTING MY TURN!");
                            sample.State.setMyTurn(true);
-                       }else{
+                       } else {
                            sample.State.setMyTurn(false);
                        }
 
@@ -78,8 +80,16 @@ public class ServerCommunicator {
                         
                        Board board = new Board(boardLetters);
                        sample.State.setBoard(board);
-                       controller.refreshGameBoard();
-                       controller.refreshOpponentsTable();
+
+                       Platform.runLater(new Runnable() {
+                           @Override
+                           public void run() {
+                               controller.updateEditability();
+                               controller.refreshUserLabels();
+                               controller.refreshGameBoard();
+                               controller.refreshOpponentsTable();
+                           }
+                       });
                    }
                } catch (Exception e) { e.printStackTrace(); }
            }
