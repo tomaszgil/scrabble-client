@@ -250,18 +250,34 @@ public class GameController {
         }
 
         // TODO send pass to the servers
+        if (State.getBoard().userMadeMove()) {
+            resultLabel.setText("You are currently trying to form a word. Cannot pass.");
+            return;
+        }
+
+        State.setMyTurn(false);
+        updateEditability();
+
+        try {
+            sendData();
+            refreshUserLabels();
+            resultLabel.setText("Passed.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            resultLabel.setText("Passing failed. Try again.");
+        }
 
         // Temporary
-        EventHandler<WindowEvent> closeHandler = new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                refreshAvailableLetters();
-            }
-        };
-
-        switcher.openInModal("respondToSwap", "Request incoming", closeHandler);
+//        EventHandler<WindowEvent> closeHandler = new EventHandler<WindowEvent>() {
+//            public void handle(WindowEvent we) {
+//                refreshAvailableLetters();
+//            }
+//        };
+//
+//        switcher.openInModal("respondToSwap", "Request incoming", closeHandler);
     }
 
-    public void onConfirm(ActionEvent actionEvent) throws IOException{
+    public void onConfirm(ActionEvent actionEvent) {
         if (!editable) {
             return;
         }
@@ -300,7 +316,17 @@ public class GameController {
         board.saveBoard();
         refreshGameBoard();
         resetIndexes();
+        try {
+            sendData();
+            refreshUserLabels();
+            resultLabel.setText("Correct. Sending the board!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            resultLabel.setText("Sending failed. Try again.");
+        }
+    }
 
+    private void sendData() throws IOException {
         String message="1_";
 
         message = message.concat(State.getPlayer().getName()).concat("_");
@@ -329,9 +355,6 @@ public class GameController {
 
         connector.outputStreamWriter.write(message.concat("\0"));
         connector.outputStreamWriter.flush();
-
-        refreshUserLabels();
-        resultLabel.setText("Correct. Sending the board!");
     }
 
     public void onBoardRect(MouseEvent mouseEvent) {

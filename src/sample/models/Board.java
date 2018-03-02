@@ -273,4 +273,16 @@ public class Board {
         return added;
     }
 
+    public boolean userMadeMove() {
+        for (Integer i = 0; i < 15; i++) {
+            for (Integer j=0; j < 15; j++) {
+                if (letters[i][j] != null && letters[i][j].isDraggable()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
