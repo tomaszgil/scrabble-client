@@ -28,6 +28,8 @@ public class Main extends Application {
             @Override
             public void handle(WindowEvent event){
                 try{
+                    connector.outputStreamWriter.write("x");
+                    connector.outputStreamWriter.flush();
                     System.out.println("Closing socket");
                     connector.getClientSocket().shutdownInput();
                     connector.getClientSocket().shutdownOutput();
