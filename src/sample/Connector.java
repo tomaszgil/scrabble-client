@@ -39,7 +39,9 @@ public class Connector {
     public String[] receiveMessage(int sizeOfBuffer) throws IOException{
         char buffer[] = new char[sizeOfBuffer];
         connector.inputStreamReader.read(buffer);
-
+        if(buffer[0]==' '){
+            System.out.println("kappa");
+        }
         String message = String.valueOf(buffer);
         String [] data = message.split("\\_");
         return data;

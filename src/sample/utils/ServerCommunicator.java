@@ -42,10 +42,12 @@ public class ServerCommunicator {
                try {
                    System.out.println("Oczekuje na dane");
                    data = connector.receiveMessage(2);
+
+                   if(data!=null && data.length > 0 && !data[0].isEmpty())
                    if(data != null && data[0].charAt(0) == '1'){ //New user in room
                        ArrayList<Player> otherPlayers = new ArrayList<>();
                        data = null;
-                       data = connector.receiveMessage(100);
+                       data = connector.receiveMessage(102);
 
                        int numberOfUsers;
                        try{
