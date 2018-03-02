@@ -1,5 +1,6 @@
 package sample.utils;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import sample.controllers.GameController;
@@ -59,7 +60,7 @@ public class ServerCommunicator {
                    }else if(data != null && data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
-                       data = connector.receiveMessage(480);
+                       data = connector.receiveMessage(482);
 
                        String player = data[0];
                        String newScore = data[1];
@@ -74,7 +75,14 @@ public class ServerCommunicator {
                            }
                        }
 
-                       int z = 2;
+                       if (data[2].charAt(0) == 't') {
+                           System.out.println("SETTING MY TURN!");
+                           sample.State.setMyTurn(true);
+                       } else {
+                           sample.State.setMyTurn(false);
+                       }
+
+                       int z = 3;
                        Character[][] boardLetters = new Character[15][15];
                        for(int i=0; i<15;i++){
                            for(int j=0; j<15; j++){
@@ -85,8 +93,16 @@ public class ServerCommunicator {
                         
                        Board board = new Board(boardLetters);
                        sample.State.setBoard(board);
-                       controller.refreshGameBoard();
-                       controller.refreshOpponentsTable();
+
+                       Platform.runLater(new Runnable() {
+                           @Override
+                           public void run() {
+                               controller.updateEditability();
+                               controller.refreshUserLabels();
+                               controller.refreshGameBoard();
+                               controller.refreshOpponentsTable();
+                           }
+                       });
                    }
                } catch (Exception e) {
                    System.out.println("EXCEPT");

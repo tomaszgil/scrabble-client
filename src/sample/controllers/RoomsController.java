@@ -66,9 +66,15 @@ public class RoomsController {
             connector.outputStreamWriter.flush();
             State.setRoom(selectedRoom);
 
-            String [] data = connector.receiveMessage(450);
+            String [] data = connector.receiveMessage(452);
 
-            int z =0;
+            if(data[0].charAt(0) == 't'){
+                State.setMyTurn(true);
+            }else{
+                State.setMyTurn(false);
+            }
+
+            int z =1;
             Character[][] boardLetters = new Character[15][15];
             for(int i =0; i<15;i++){
                 for(int j=0; j<15; j++){
@@ -89,8 +95,6 @@ public class RoomsController {
 
             AvailableLetters availableLetters = new AvailableLetters(letters);
             State.setAvailableLetters(availableLetters);
-
-            State.setMyTurn(true);
 
             ArrayList<Player> otherPlayers = new ArrayList<>();
             data = null;
