@@ -123,8 +123,9 @@ public class ServerCommunicator {
                        sample.State.setAvailableLetters(availableLetters);
                    }
                } catch (Exception e) {
+                   System.out.println("EXCEPT");
                    e.printStackTrace();
-                  // Thread.currentThread().join();
+                   Thread.currentThread().interrupt();
                }
            }
        }

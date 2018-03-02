@@ -464,7 +464,6 @@ public class GameController {
     public void onRoomQuit(ActionEvent actionEvent) {
         // TODO handle quitting game
         connector.serverCommunicator.thread.interrupt();
-        System.out.println("WYSLALEM INTERUPTA");
         switcher.switchTo("rooms", actionEvent);
     }
 }
