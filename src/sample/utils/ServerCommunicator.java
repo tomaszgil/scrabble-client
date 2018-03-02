@@ -9,6 +9,7 @@ import sample.models.AvailableLetters;
 import sample.models.Board;
 import sample.models.Player;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -38,9 +39,6 @@ public class ServerCommunicator {
 
        @Override public void run() {
            while (running){
-               try{
-                   Thread.sleep(1000);
-               }catch (InterruptedException e){}
                String [] data = null;
                try {
                    //System.out.println("Oczekuje na dane");
@@ -50,7 +48,7 @@ public class ServerCommunicator {
                    if(data != null && data[0].charAt(0) == '1'){ //New user in room
                        ArrayList<Player> otherPlayers = new ArrayList<>();
                        data = null;
-                       data = connector.receiveMessage(102);
+                       data = connector.receiveMessage(100);
 
                        int numberOfUsers;
                        try{
@@ -141,9 +139,7 @@ public class ServerCommunicator {
                    }
                } catch (Exception e) {
                    Thread.currentThread().interrupt();
-                   try{
-                       Thread.currentThread().join();
-                   }catch (Exception f){}
+                   connector.serverCommunicator.setRunning(false);
                    System.out.println("EXCEPT");
                    e.printStackTrace();
                }

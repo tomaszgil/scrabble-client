@@ -21,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 import static sample.Main.connector;
+import static sample.Main.step;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -49,15 +51,33 @@ public class RoomsController {
     }
 
     private void getRooms() throws IOException{
-        System.out.println("ROOOOOOOOOOOOMS");
-        String [] data = connector.receiveMessage(50);
-        System.out.println("ROOOOOOOOOOOOOOOOMS");
-        ArrayList<Room> rooms = new ArrayList<>();
-        for(int i=0; i<=10; i=i+2){
-            rooms.add(new Room(data[i], Integer.parseInt(data[i+1])));
-        }
+        if(step==0){
+            String [] data = connector.receiveMessage(50);
+            ArrayList<Room> rooms = new ArrayList<>();
+            for(int i=0; i<=10; i=i+2){
+                rooms.add(new Room(data[i], Integer.parseInt(data[i+1])));
+            }
 
-        State.setRoomList(rooms);
+            State.setRoomList(rooms);
+            step++;
+        }else{
+            System.out.println("KROK DRUGI");
+            String [] data = connector.receiveMessage(1);
+            while(data == null || data.length < 1|| data[0].length() < 1 || !data[0].equals("p")){
+                data = connector.receiveMessage(1);
+            }
+           // System.out.println(data[0]);
+//            if(data[0].charAt(0) == 'A'){
+            String [] message = connector.receiveMessage(48);
+            System.out.println(message[0]);
+
+//                System.out.println(message);
+            ArrayList<Room> rooms = new ArrayList<>();
+            for(int i=0; i<=10; i=i+2){
+                System.out.println(message[i]  + "   " + message[i+1]);
+                //rooms.add(new Room("Alp" + message[i], Integer.parseInt(message[i+1])));
+            }
+        }
     }
 
     public void play(ActionEvent actionEvent) throws IOException {

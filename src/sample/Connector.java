@@ -40,7 +40,6 @@ public class Connector {
         char buffer[] = new char[sizeOfBuffer];
         connector.inputStreamReader.read(buffer);
         String message = String.valueOf(buffer);
-        System.out.println(message);
         String [] data = message.split("\\_");
         return data;
 
