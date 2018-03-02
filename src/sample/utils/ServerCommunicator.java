@@ -40,7 +40,7 @@ public class ServerCommunicator {
            while (running){
                String [] data = null;
                try {
-                   System.out.println("Oczekuje na dane");
+                   //System.out.println("Oczekuje na dane");
                    data = connector.receiveMessage(2);
 
                    if(data!=null && data.length > 0 && !data[0].isEmpty())
@@ -56,7 +56,7 @@ public class ServerCommunicator {
                             numberOfUsers=0;
                        }
                        //char numberOfUsers = data[0].charAt(0);
-                       System.out.println(numberOfUsers);
+                     //  System.out.println(numberOfUsers);
 
                        if(numberOfUsers!=0){
                            int max = Integer.parseInt(data[0]);
