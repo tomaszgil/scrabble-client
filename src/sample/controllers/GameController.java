@@ -91,7 +91,11 @@ public class GameController {
     public void initialize() {
         connector.serverCommunicator.thread.setDaemon(true);
         connector.serverCommunicator.setController(this);
-        connector.serverCommunicator.thread.start();
+        if(!connector.serverCommunicator.isRunning()){
+            connector.serverCommunicator.setRunning(true);
+        }else{
+            connector.serverCommunicator.thread.start();
+        }
 
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
@@ -492,10 +496,13 @@ public class GameController {
         availableLetterIndex = colIndex;
     }
 
-    public void onRoomQuit(ActionEvent actionEvent) throws IOException {
+    public void onRoomQuit(ActionEvent actionEvent) throws IOException, InterruptedException {
+        connector.serverCommunicator.setRunning(false);
+        connector.serverCommunicator.thread.interrupt();
+
+        System.out.println("QUITUJE");
         connector.outputStreamWriter.write("2");
         connector.outputStreamWriter.flush();
-        connector.serverCommunicator.thread.interrupt();
         switcher.switchTo("rooms", actionEvent);
     }
 }

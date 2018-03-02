@@ -38,6 +38,9 @@ public class ServerCommunicator {
 
        @Override public void run() {
            while (running){
+               try{
+                   Thread.sleep(1000);
+               }catch (InterruptedException e){}
                String [] data = null;
                try {
                    System.out.println("Oczekuje na dane");
@@ -135,9 +138,12 @@ public class ServerCommunicator {
                        });
                    }
                } catch (Exception e) {
+                   Thread.currentThread().interrupt();
+                   try{
+                       Thread.currentThread().join();
+                   }catch (Exception f){}
                    System.out.println("EXCEPT");
                    e.printStackTrace();
-                   Thread.currentThread().interrupt();
                }
            }
        }

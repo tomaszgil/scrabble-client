@@ -40,6 +40,7 @@ public class RoomsController {
 
     @FXML
     public void initialize() throws IOException{
+        System.out.println("INITIALIZER");
         getRooms();
         nameColumn.setCellValueFactory(new PropertyValueFactory<Room, String>("name"));
         freeSlotsColumn.setCellValueFactory(new PropertyValueFactory<Room, Integer>("freeSlots"));
