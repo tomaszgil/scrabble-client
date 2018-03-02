@@ -14,19 +14,32 @@ import static sample.Main.connector;
 
 public class ServerCommunicator {
     private GameController controller;
+    private boolean running;
+
+    public ServerCommunicator() {
+        this.running = true;
+    }
 
     public void setController(GameController gameController){
         this.controller = gameController;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     public Thread thread = new Thread() {
 
-       @Override public void run(){
-           while (true){
+       @Override public void run() {
+           while (running){
                try {
                    System.out.println("Oczekuje na dane");
                    String[] data = connector.receiveMessage(2);
-                   if(data[0].charAt(0) == '1'){ //New user in room
+                   if(data != null && data[0].charAt(0) == '1'){ //New user in room
 
                        ArrayList<Player> otherPlayers = new ArrayList<>();
                        data = null;
@@ -44,7 +57,7 @@ public class ServerCommunicator {
 
                        sample.State.setOtherPlayers(otherPlayers);
                        controller.refreshOpponentsTable();
-                   }else if(data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
+                   }else if(data != null && data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
                        data = connector.receiveMessage(482);
@@ -91,7 +104,11 @@ public class ServerCommunicator {
                            }
                        });
                    }
-               } catch (Exception e) { e.printStackTrace(); }
+               } catch (Exception e) {
+                   System.out.println("EXCEPT");
+                   e.printStackTrace();
+                   Thread.currentThread().interrupt();
+               }
            }
        }
    };

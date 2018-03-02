@@ -4,9 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import sample.State;
 import sample.models.Player;
+import sample.models.Room;
 import sample.utils.SceneSwitcher;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static sample.Main.connector;
 

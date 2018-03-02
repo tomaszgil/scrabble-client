@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="829.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="846.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.GameController">
    <children>
       <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="772.0" prefWidth="274.0" style="-fx-background-color: #ddd;">
          <children>
@@ -41,11 +41,12 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="roomLabel" layoutX="15.0" layoutY="148.0" prefHeight="15.0" prefWidth="246.0">
+            <Label fx:id="roomLabel" layoutX="15.0" layoutY="148.0" prefHeight="25.0" prefWidth="142.0">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
+            <Button layoutX="175.0" layoutY="148.0" mnemonicParsing="false" onAction="#onRoomQuit" prefHeight="25.0" prefWidth="85.0" text="Quit room" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="boardPane" layoutX="307.0" layoutY="13.0" prefHeight="693.0" prefWidth="875.0">
@@ -345,12 +346,12 @@
       <Button fx:id="confirmButton" layoutX="1097.0" layoutY="717.0" mnemonicParsing="false" onAction="#onConfirm" prefHeight="69.0" prefWidth="85.0" text="Confirm" />
       <Label fx:id="resultLabel" alignment="CENTER_RIGHT" layoutX="680.0" layoutY="800.0" prefHeight="15.0" prefWidth="502.0" textAlignment="RIGHT">
          <font>
-            <Font name="System Bold" size="13.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Label fx:id="turnLabel" layoutX="14.0" layoutY="800.0" prefHeight="15.0" prefWidth="274.0">
+      <Label fx:id="turnLabel" layoutX="14.0" layoutY="800.0" prefHeight="15.0" prefWidth="274.0" textFill="RED">
          <font>
-            <Font name="System Bold" size="13.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
    </children>
