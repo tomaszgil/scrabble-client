@@ -218,7 +218,7 @@ public class GameController {
         }
     }
 
-    private void refreshAvailableLetters() {
+    public void refreshAvailableLetters() {
         Letter[] letters = State.getAvailableLetters().getLetters();
 
         for (int i = 0; i < 7; i++) {
