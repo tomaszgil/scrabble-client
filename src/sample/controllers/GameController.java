@@ -285,7 +285,6 @@ public class GameController {
 
         String message="1_";
 
-
         message = message.concat(State.getPlayer().getName()).concat("_");
 
         int length = String.valueOf(State.getPlayer().getPoints()).length();
@@ -296,6 +295,11 @@ public class GameController {
         }else{
             message = message.concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
         }
+
+        for(Character x: State.getAvailableLetters().getLetterMap()){
+            message = message.concat(x.toString());
+        }
+        message = message.concat("_");
 
         Character[][] letterMap = State.getBoard().getLetterMap();
 
@@ -440,6 +444,7 @@ public class GameController {
     public void onRoomQuit(ActionEvent actionEvent) {
         // TODO handle quitting game
         connector.serverCommunicator.thread.interrupt();
+        System.out.println("WYSLALEM INTERUPTA");
         switcher.switchTo("rooms", actionEvent);
     }
 }
