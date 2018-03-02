@@ -101,8 +101,7 @@ public class RoomsController {
             ArrayList<Player> otherPlayers = new ArrayList<>();
             data = null;
             data = connector.receiveMessage(104);
-            System.out.println("TO SOM Z ROOM CONTROLLERA");
-
+            
             char numberOfUsers = data[0].charAt(0);
 
             if(numberOfUsers!='0'){
