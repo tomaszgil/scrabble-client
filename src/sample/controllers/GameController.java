@@ -316,7 +316,6 @@ public class GameController {
         board.saveBoard();
         refreshGameBoard();
         resetIndexes();
-
         try {
             sendData();
             refreshUserLabels();
@@ -329,6 +328,7 @@ public class GameController {
 
     private void sendData() throws IOException {
         String message="1_";
+
         message = message.concat(State.getPlayer().getName()).concat("_");
 
         int length = String.valueOf(State.getPlayer().getPoints()).length();
@@ -339,6 +339,11 @@ public class GameController {
         } else {
             message = message.concat(String.valueOf(State.getPlayer().getPoints())).concat("_");
         }
+
+        for(Character x: State.getAvailableLetters().getLetterMap()){
+            message = message.concat(x.toString());
+        }
+        message = message.concat("_");
 
         Character[][] letterMap = State.getBoard().getLetterMap();
 

@@ -3,7 +3,9 @@ package sample.utils;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import sample.State;
 import sample.controllers.GameController;
+import sample.models.AvailableLetters;
 import sample.models.Board;
 import sample.models.Player;
 
@@ -93,6 +95,8 @@ public class ServerCommunicator {
                         
                        Board board = new Board(boardLetters);
                        sample.State.setBoard(board);
+                       controller.refreshGameBoard();
+                       controller.refreshOpponentsTable();
 
                        Platform.runLater(new Runnable() {
                            @Override
@@ -103,6 +107,20 @@ public class ServerCommunicator {
                                controller.refreshOpponentsTable();
                            }
                        });
+                   }else if(data != null && data[0].charAt(0) == '3'){// Refresh my avaible letters
+                       data = null;
+                       data = connector.receiveMessage(14);
+
+
+                       Character[] letters = new Character[7];
+
+                       System.out.println(letters.length);
+                       for(int i =0; i<7; i++){
+                           letters[i]=data[0].charAt(i);
+                       }
+
+                       AvailableLetters availableLetters = new AvailableLetters(letters);
+                       sample.State.setAvailableLetters(availableLetters);
                    }
                } catch (Exception e) {
                    System.out.println("EXCEPT");
