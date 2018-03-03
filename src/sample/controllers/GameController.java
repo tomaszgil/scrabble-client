@@ -500,7 +500,7 @@ public class GameController {
         connector.serverCommunicator.setRunning(false);
         connector.serverCommunicator.thread.interrupt();
 
-        connector.outputStreamWriter.write("2");
+        connector.outputStreamWriter.write("2_");
         connector.outputStreamWriter.flush();
         switcher.switchTo("rooms", actionEvent);
     }

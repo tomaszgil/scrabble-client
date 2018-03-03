@@ -42,10 +42,26 @@ public class ServerCommunicator {
                String [] data = null;
                try {
                    //System.out.println("Oczekuje na dane");
-                   data = connector.receiveMessage(2);
+                   char buffer [] = new char [2];
+                   connector.inputStreamReader.read(buffer);
+                   data = String.valueOf(buffer).split("\\_");
 
-                   if(data!=null && data.length > 0 && !data[0].isEmpty())
-                   if(data != null && data[0].charAt(0) == '1'){ //New user in room
+                  // data = connector.receiveMessage(2);
+                   while(data == null || data.length <1 || data[0].isEmpty()){
+                       if(buffer[0] == '1' && buffer[1] == '_')
+                           break;
+                       else if(buffer[0] == '2' && buffer[1] == '_')
+                           break;
+                       else if(buffer[0] == '3' && buffer[1] == '_')
+                           break;
+
+                       connector.inputStreamReader.read(buffer);
+                       data = String.valueOf(buffer).split("\\_");
+
+                   }
+                   if(data[0].charAt(0) == '1'){ //New user in room
+                       System.out.println("New user in room");
+
                        ArrayList<Player> otherPlayers = new ArrayList<>();
                        data = null;
                        data = connector.receiveMessage(100);
@@ -70,7 +86,7 @@ public class ServerCommunicator {
                        sample.State.setOtherPlayers(otherPlayers);
                        controller.refreshOpponentsTable();
                        data=null;
-                   }else if(data != null && data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
+                   }else if(data[0].charAt(0) == '2'){ //Somebody end turn, refresh board and userscore
 
                        data = null;
                        data = connector.receiveMessage(478);
@@ -114,7 +130,7 @@ public class ServerCommunicator {
                            }
                        });
                        data=null;
-                   }else if(data != null && data[0].charAt(0) == '3'){// Refresh my avaible letters
+                   }else if(data[0].charAt(0) == '3'){// Refresh my avaible letters
                        data = null;
                        data = connector.receiveMessage(14);
 
