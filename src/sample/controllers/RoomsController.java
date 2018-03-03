@@ -84,9 +84,21 @@ public class RoomsController {
             connector.outputStreamWriter.flush();
             State.setRoom(selectedRoom);
 
-            String [] data = connector.receiveMessage(452);
+            String [] message = connector.receiveMessage(1);
+//            while(message == null || message.length < 1|| message[0].length() < 1){
+            while(true){
+                if(message.length == 1 && message[0].length() ==1) {
+                    if (message[0].charAt(0) == 't' || message[0].charAt(0) == 'f')
+                        break;
+                }
+                else{
+                    message = connector.receiveMessage(1);
+                }
+            }
 
-            if(data[0].charAt(0) == 't'){
+            String [] data = connector.receiveMessage(479);
+
+            if(message[0].charAt(0) == 't'){
                 State.setMyTurn(true);
             }else{
                 State.setMyTurn(false);
@@ -105,6 +117,7 @@ public class RoomsController {
             State.setBoard(board);
             
             data = connector.receiveMessage(14);
+
             Character[] letters = new Character[7];
 
             for(int i =0; i<7; i++){
@@ -117,12 +130,13 @@ public class RoomsController {
             ArrayList<Player> otherPlayers = new ArrayList<>();
             data = null;
             data = connector.receiveMessage(104);
-            
+
             char numberOfUsers = data[0].charAt(0);
 
             if(numberOfUsers!='0'){
                 int max = Integer.parseInt(data[0]);
                 for(int i =1; i<max*2; i=i+2){
+                    System.out.println(data[i] + " " + data[i+1]);
                     otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
                 }
             }

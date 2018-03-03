@@ -42,18 +42,25 @@ public class ServerCommunicator {
                String [] data = null;
                try {
                    //System.out.println("Oczekuje na dane");
-                   char buffer [] = new char [2];
+                   char buffer [] = new char [1];
                    connector.inputStreamReader.read(buffer);
                    data = String.valueOf(buffer).split("\\_");
 
                   // data = connector.receiveMessage(2);
-                   while(data == null || data.length <1 || data[0].isEmpty()){
-                       if(buffer[0] == '1' && buffer[1] == '_')
-                           break;
-                       else if(buffer[0] == '2' && buffer[1] == '_')
-                           break;
-                       else if(buffer[0] == '3' && buffer[1] == '_')
-                           break;
+                   while(data.length <1 || data[0].isEmpty()){
+                       if(buffer[0] == '1'){
+                           connector.inputStreamReader.read(buffer);
+                           if(buffer[0] == '_')
+                               break;
+                       }else if(buffer[0] == '2') {
+                           connector.inputStreamReader.read(buffer);
+                           if (buffer[0] == '_')
+                               break;
+                       }else if(buffer[0] == '3') {
+                           connector.inputStreamReader.read(buffer);
+                           if (buffer[0] == '_')
+                               break;
+                       }
 
                        connector.inputStreamReader.read(buffer);
                        data = String.valueOf(buffer).split("\\_");
@@ -66,20 +73,26 @@ public class ServerCommunicator {
                        data = null;
                        data = connector.receiveMessage(100);
 
+                       for(int i =0; i<data.length; i++){
+                           System.out.println(i + ": " + data[i]);
+                       }
+
                        int numberOfUsers;
                        try{
-                           numberOfUsers = Integer.parseInt(data[0]);
+                           numberOfUsers = Integer.parseInt(data[1]);
                        }catch(NumberFormatException e){
                             numberOfUsers=0;
                        }
+
+                       System.out.println(numberOfUsers);
                        //char numberOfUsers = data[0].charAt(0);
                      //  System.out.println(numberOfUsers);
 
                        if(numberOfUsers!=0){
-                           int max = Integer.parseInt(data[0]);
-                           for(int i =1; i<max*2; i=i+2){
-                               System.out.println("Gracz " + data[i] + " score: " + data[i+1]);
-                               otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
+                           int max = Integer.parseInt(data[1]);
+                           for(int i=0,j=2; i<max; i++, j=j+2){
+                               System.out.println("Gracz " + data[j] + " score: " + data[j+1]);
+                               otherPlayers.add(new Player(data[j],Integer.parseInt(data[j+1])));
                            }
                        }
 
@@ -91,8 +104,11 @@ public class ServerCommunicator {
                        data = null;
                        data = connector.receiveMessage(478);
 
-                       String player = data[0];
-                       String newScore = data[1];
+                       for(int i =0; i<data.length; i++){
+                           System.out.println(i +": "+ data[i]);
+                       }
+                       String player = data[1];
+                       String newScore = data[2];
 
                        ArrayList<Player> oppontents = sample.State.getOtherPlayers();
                        for (Player opponent : oppontents) {
@@ -101,14 +117,14 @@ public class ServerCommunicator {
                            }
                        }
 
-                       if (data[2].charAt(0) == 't') {
+                       if (data[3].charAt(0) == 't') {
                            System.out.println("SETTING MY TURN!");
                            sample.State.setMyTurn(true);
                        } else {
                            sample.State.setMyTurn(false);
                        }
 
-                       int z = 3;
+                       int z = 4;
                        Character[][] boardLetters = new Character[15][15];
                        for(int i=0; i<15;i++){
                            for(int j=0; j<15; j++){
@@ -132,13 +148,12 @@ public class ServerCommunicator {
                        data=null;
                    }else if(data[0].charAt(0) == '3'){// Refresh my avaible letters
                        data = null;
-                       data = connector.receiveMessage(14);
-
+                       data = connector.receiveMessage(8);
 
                        Character[] letters = new Character[7];
 
                        for(int i =0; i<7; i++){
-                           letters[i]=data[0].charAt(i);
+                           letters[i]=data[1].charAt(i);
                        }
 
                        AvailableLetters availableLetters = new AvailableLetters(letters);
