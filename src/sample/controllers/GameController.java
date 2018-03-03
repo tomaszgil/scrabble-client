@@ -497,6 +497,10 @@ public class GameController {
     }
 
     public void onRoomQuit(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if (!State.getOtherPlayers().isEmpty()) {
+            return;
+        }
+
         connector.serverCommunicator.setRunning(false);
         connector.serverCommunicator.thread.interrupt();
 
