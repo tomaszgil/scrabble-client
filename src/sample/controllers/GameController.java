@@ -509,6 +509,7 @@ public class GameController {
         }
 
         State.getPlayer().setPoints(0);
+        State.getBoard().resetLetters();
 
         connector.serverCommunicator.setRunning(false);
         connector.serverCommunicator.thread.interrupt();
