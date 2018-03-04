@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Main extends Application {
     public static Connector connector;
-
+    public static int step=0;
     @Override
     public void start(Stage primaryStage) throws Exception{
         connector = new Connector();
