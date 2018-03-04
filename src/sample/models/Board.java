@@ -26,6 +26,17 @@ public class Board {
         this.initialWords = getAllWords();
     }
 
+    public void resetLetters() {
+        this.letters = new Letter[15][15];
+        Character[][] letterMap = new Character[15][15];
+        for (int i=0; i<15; i++) {
+            for (int j=0; j<15; j++) {
+                letterMap[i][j] = '0';
+            }
+        }
+        prepareBoard(letterMap);
+    }
+
     public Character[][] getLetterMap() {
         Character[][] letterMap = new Character[15][15];
 

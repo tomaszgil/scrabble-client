@@ -24,7 +24,7 @@ public class LoginController {
 
     public void login(ActionEvent actionEvent) throws IOException{
         String name = nameInput.getText();
-        if (!name.isEmpty()) {
+        if (!name.isEmpty() && name.length() < 20 && !name.contains("_")) {
             connector.outputStreamWriter.write(name.concat("\0"));
             connector.outputStreamWriter.flush();
             State.setPlayer(new Player(name, 0));

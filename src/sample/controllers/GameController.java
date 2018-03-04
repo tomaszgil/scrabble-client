@@ -27,6 +27,7 @@ import sample.models.Letter;
 import sample.models.Player;
 import sample.utils.SceneSwitcher;
 import sample.utils.ScrabbleScoreCounter;
+import sample.utils.ServerCommunicator;
 import sample.utils.WordVerifier;
 import java.io.IOException;
 import java.sql.Array;
@@ -91,7 +92,17 @@ public class GameController {
     public void initialize() {
         connector.serverCommunicator.thread.setDaemon(true);
         connector.serverCommunicator.setController(this);
-        connector.serverCommunicator.thread.start();
+        if(!connector.serverCommunicator.isRunning()){
+            connector.serverCommunicator = new ServerCommunicator();
+            connector.serverCommunicator.thread = new Thread(connector.serverCommunicator);
+            connector.serverCommunicator.setController(this);
+            connector.serverCommunicator.thread.setDaemon(true);
+
+            connector.serverCommunicator.thread.start();
+            //connector.serverCommunicator.setRunning(true);
+        }else{
+            connector.serverCommunicator.thread.start();
+        }
 
         userName.setText(State.getPlayer().getName());
         userScore.setText(State.getPlayer().getPoints().toString());
@@ -492,9 +503,19 @@ public class GameController {
         availableLetterIndex = colIndex;
     }
 
-    public void onRoomQuit(ActionEvent actionEvent) {
-        // TODO handle quitting game
+    public void onRoomQuit(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if (State.isMyTurn() && !State.getOtherPlayers().isEmpty()) {
+            return;
+        }
+
+        State.getPlayer().setPoints(0);
+        State.getBoard().resetLetters();
+
+        connector.serverCommunicator.setRunning(false);
         connector.serverCommunicator.thread.interrupt();
+
+        connector.outputStreamWriter.write("2_");
+        connector.outputStreamWriter.flush();
         switcher.switchTo("rooms", actionEvent);
     }
 }
