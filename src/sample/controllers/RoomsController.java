@@ -86,6 +86,8 @@ public class RoomsController {
            if(message[0].charAt(0) == 'x'){
                roomList.getSelectionModel().clearSelection();
                getRooms();
+               roomsData.setAll(State.getRoomList());
+               roomList.setItems(roomsData);
                play(actionEvent);
            }else{
                State.setRoom(selectedRoom);
