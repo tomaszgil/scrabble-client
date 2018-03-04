@@ -508,6 +508,8 @@ public class GameController {
             return;
         }
 
+        State.getPlayer().setPoints(0);
+
         connector.serverCommunicator.setRunning(false);
         connector.serverCommunicator.thread.interrupt();
 
