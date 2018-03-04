@@ -247,12 +247,17 @@ public class GameController {
         }
     }
 
-    public void onExchange(ActionEvent actionEvent) {
-        if (!editable) {
-            return;
+    public void onExchange(ActionEvent actionEvent) throws IOException {
+        String message="3_";
+
+        for(Character x: State.getAvailableLetters().getLetterMap()){
+            message = message.concat(x.toString());
         }
 
-        switcher.openInModal("initiateSwap", "Send a swap request", null);
+        message = message.concat("_");
+        connector.outputStreamWriter.write(message.concat("\0"));
+        connector.outputStreamWriter.flush();
+
     }
 
     public void onPass(ActionEvent actionEvent) {
@@ -277,15 +282,6 @@ public class GameController {
             e.printStackTrace();
             resultLabel.setText("Passing failed. Try again.");
         }
-
-        // Temporary
-//        EventHandler<WindowEvent> closeHandler = new EventHandler<WindowEvent>() {
-//            public void handle(WindowEvent we) {
-//                refreshAvailableLetters();
-//            }
-//        };
-//
-//        switcher.openInModal("respondToSwap", "Request incoming", closeHandler);
     }
 
     public void onConfirm(ActionEvent actionEvent) {
