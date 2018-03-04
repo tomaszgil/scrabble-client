@@ -196,10 +196,6 @@ public class ServerCommunicator  implements Runnable{
                     data = null;
                     data = connector.receiveMessage(100);
 
-                    for(int i =0; i<data.length; i++){
-                        System.out.println(i + ": " + data[i]);
-                    }
-
                     int numberOfUsers;
                     try{
                         numberOfUsers = Integer.parseInt(data[1]);

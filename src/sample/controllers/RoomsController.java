@@ -101,8 +101,6 @@ public class RoomsController {
                        message = connector.receiveMessage(1);
                    }
                }
-               System.out.println(message[0]);
-
                String [] data = connector.receiveMessage(479);
 
                if(message[0].charAt(0) == 't'){
@@ -143,7 +141,6 @@ public class RoomsController {
                if(numberOfUsers!='0'){
                    int max = Integer.parseInt(data[0]);
                    for(int i =1; i<max*2; i=i+2){
-                       // System.out.println(data[i] + " " + data[i+1]);
                        otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
                    }
                }
