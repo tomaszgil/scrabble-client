@@ -83,8 +83,8 @@ public class RoomsController {
             connector.outputStreamWriter.flush();
 
            String [] message = connector.receiveMessage(1);
-            System.out.println(message[0]);
            if(message[0].charAt(0) == 'x'){
+               roomList.getSelectionModel().clearSelection();
                getRooms();
                play(actionEvent);
            }else{
