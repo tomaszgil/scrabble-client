@@ -78,71 +78,77 @@ public class RoomsController {
 
     public void play(ActionEvent actionEvent) throws IOException {
         Room selectedRoom = roomList.getSelectionModel().getSelectedItem();
-
         if (selectedRoom != null && selectedRoom.getFreeSlots() > 0) { // TODO verify on server
             connector.outputStreamWriter.write(selectedRoom.getName().concat("\0"));
             connector.outputStreamWriter.flush();
-            State.setRoom(selectedRoom);
 
-            String [] message = connector.receiveMessage(1);
-//            while(message == null || message.length < 1|| message[0].length() < 1){
-            while(true){
-                if(message.length == 1 && message[0].length() ==1) {
-                    if (message[0].charAt(0) == 't' || message[0].charAt(0) == 'f')
-                        break;
-                }
-                else{
-                    message = connector.receiveMessage(1);
-                }
-            }
+           String [] message = connector.receiveMessage(1);
+            System.out.println(message[0]);
+           if(message[0].charAt(0) == 'x'){
+               getRooms();
+               play(actionEvent);
+           }else{
+               State.setRoom(selectedRoom);
+               message = connector.receiveMessage(1);
+               while(true){
+                   if(message.length == 1 && message[0].length() ==1) {
+                       if (message[0].charAt(0) == 't' || message[0].charAt(0) == 'f')
+                           break;
+                   }
+                   else{
+                       message = connector.receiveMessage(1);
+                   }
+               }
+               System.out.println(message[0]);
 
-            String [] data = connector.receiveMessage(479);
+               String [] data = connector.receiveMessage(479);
 
-            if(message[0].charAt(0) == 't'){
-                State.setMyTurn(true);
-            }else{
-                State.setMyTurn(false);
-            }
+               if(message[0].charAt(0) == 't'){
+                   State.setMyTurn(true);
+               }else{
+                   State.setMyTurn(false);
+               }
 
-            int z =1;
-            Character[][] boardLetters = new Character[15][15];
-            for(int i =0; i<15;i++){
-                for(int j=0; j<15; j++){
-                    boardLetters[i][j] = data[z].charAt(0);
-                    z++;
-                }
-            }
+               int z =1;
+               Character[][] boardLetters = new Character[15][15];
+               for(int i =0; i<15;i++){
+                   for(int j=0; j<15; j++){
+                       boardLetters[i][j] = data[z].charAt(0);
+                       z++;
+                   }
+               }
 
-            Board board = new Board(boardLetters);
-            State.setBoard(board);
-            
-            data = connector.receiveMessage(14);
+               Board board = new Board(boardLetters);
+               State.setBoard(board);
 
-            Character[] letters = new Character[7];
+               data = connector.receiveMessage(14);
 
-            for(int i =0; i<7; i++){
-                letters[i]=data[i].charAt(0);
-            }
+               Character[] letters = new Character[7];
 
-            AvailableLetters availableLetters = new AvailableLetters(letters);
-            State.setAvailableLetters(availableLetters);
+               for(int i =0; i<7; i++){
+                   letters[i]=data[i].charAt(0);
+               }
 
-            ArrayList<Player> otherPlayers = new ArrayList<>();
-            data = null;
-            data = connector.receiveMessage(104);
+               AvailableLetters availableLetters = new AvailableLetters(letters);
+               State.setAvailableLetters(availableLetters);
 
-            char numberOfUsers = data[0].charAt(0);
+               ArrayList<Player> otherPlayers = new ArrayList<>();
+               data = null;
+               data = connector.receiveMessage(104);
 
-            if(numberOfUsers!='0'){
-                int max = Integer.parseInt(data[0]);
-                for(int i =1; i<max*2; i=i+2){
-                    System.out.println(data[i] + " " + data[i+1]);
-                    otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
-                }
-            }
-            State.setOtherPlayers(otherPlayers);
+               char numberOfUsers = data[0].charAt(0);
 
-            switcher.switchTo("game", actionEvent);
+               if(numberOfUsers!='0'){
+                   int max = Integer.parseInt(data[0]);
+                   for(int i =1; i<max*2; i=i+2){
+                       // System.out.println(data[i] + " " + data[i+1]);
+                       otherPlayers.add(new Player(data[i],Integer.parseInt(data[i+1])));
+                   }
+               }
+               State.setOtherPlayers(otherPlayers);
+
+               switcher.switchTo("game", actionEvent);
+           }
         }
     }
 }

@@ -27,6 +27,7 @@ import sample.models.Letter;
 import sample.models.Player;
 import sample.utils.SceneSwitcher;
 import sample.utils.ScrabbleScoreCounter;
+import sample.utils.ServerCommunicator;
 import sample.utils.WordVerifier;
 import java.io.IOException;
 import java.sql.Array;
@@ -92,7 +93,13 @@ public class GameController {
         connector.serverCommunicator.thread.setDaemon(true);
         connector.serverCommunicator.setController(this);
         if(!connector.serverCommunicator.isRunning()){
-            connector.serverCommunicator.setRunning(true);
+            connector.serverCommunicator = new ServerCommunicator();
+            connector.serverCommunicator.thread = new Thread(connector.serverCommunicator);
+            connector.serverCommunicator.setController(this);
+            connector.serverCommunicator.thread.setDaemon(true);
+
+            connector.serverCommunicator.thread.start();
+            //connector.serverCommunicator.setRunning(true);
         }else{
             connector.serverCommunicator.thread.start();
         }
